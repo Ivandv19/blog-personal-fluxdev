@@ -16,7 +16,7 @@ export function remarkReadingTime() {
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://fluxdv.mgdc.site',
+  site: 'https://fluxdv.icu/',
   output: 'static',
 
   markdown: {
