@@ -1,6 +1,8 @@
 ---
 import Layout from './Layout.astro';
 import { useTranslations } from '../i18n/ui';
+import ShareButtons from '../components/ShareButtons.astro';
+import Comments from '../components/Comments.astro';
 
 const { frontmatter } = Astro.props;
 
@@ -54,5 +56,8 @@ const t = useTranslations(lang);
     
     <slot />
     
+    <ShareButtons title={frontmatter.title} url={Astro.url} />
+
+    <Comments slug={Astro.url.pathname.replace(/^\/|\/$/g, '').replaceAll('/', '-')} />
   </article>
 </Layout>

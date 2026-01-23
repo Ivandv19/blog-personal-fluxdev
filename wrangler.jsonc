@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "blog-personal-fluxdev",
+  "compatibility_date": "2025-01-21",
+  "pages_build_output_dir": "./dist",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "blog-comments",
+      "database_id": "744a94e3-069c-4f0e-8e2a-40358b2dc74b"
+    }
+  ]
+}
