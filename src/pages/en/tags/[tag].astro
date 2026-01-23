@@ -1,17 +1,13 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Layout from '../../../layouts/Layout.astro';
+import { useTranslations } from '../../../i18n/ui';
 
-// 1. Función obligatoria para generar rutas estáticas (SSG)
 export async function getStaticPaths() {
   const posts = import.meta.glob('../blog/*.md', { eager: true });
   const allPosts = Object.values(posts);
-
-  // Sacamos todas las etiquetas únicas (Set elimina duplicados)
   const uniqueTags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
 
-  // Devolvemos una ruta por cada etiqueta encontrada
   return uniqueTags.map((tag) => {
-    // Filtramos los posts que tengan esa etiqueta
     const filteredPosts = allPosts.filter((post) => post.frontmatter.tags?.includes(tag));
     return {
       params: { tag },
@@ -20,16 +16,18 @@ export async function getStaticPaths() {
   });
 }
 
-// 2. Aquí recibimos los datos de la URL actual
 const { tag } = Astro.params;
 const { posts } = Astro.props;
+
+const lang = 'en';
+const t = useTranslations(lang);
 ---
 
-<Layout title={`Artículos sobre ${tag}`}>
+<Layout title={`${t('tags.title')} ${tag}`}>
   <div class="py-10">
     
     <div class="mb-10 border-b border-border-subtle pb-4">
-      <p class="text-sm text-text-muted uppercase tracking-widest font-bold">Explorando</p>
+      <p class="text-sm text-text-muted uppercase tracking-widest font-bold">{t('tags.exploring')}</p>
       <h1 class="text-4xl font-bold text-text-primary capitalize">
         #{tag}
       </h1>
@@ -43,15 +41,15 @@ const { posts } = Astro.props;
                     {post.frontmatter.title}
                 </h2>
                 <p class="text-text-secondary mt-2 line-clamp-2">{post.frontmatter.description}</p>
-                <span class="text-sm font-bold text-accent mt-4 block">Leer artículo &rarr;</span>
+                <span class="text-sm font-bold text-accent mt-4 block">{t('blog.readMore')} &rarr;</span>
             </a>
         </li>
       ))}
     </ul>
     
     <div class="mt-12">
-        <a href="/" class="text-text-muted hover:text-text-primary underline underline-offset-4">
-            &larr; Volver al inicio
+        <a href={`/en`} class="text-text-muted hover:text-text-primary underline underline-offset-4">
+            &larr; {t('blog.back')}
         </a>
     </div>
 

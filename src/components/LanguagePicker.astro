@@ -1,0 +1,38 @@
+---
+import { languages } from '../i18n/ui';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+const { lang } = Astro.params;
+
+function getLangPath(targetLang: string) {
+  const currentPath = Astro.url.pathname;
+  // If we are at root /, and target is en -> /en/
+  // If we are at /en/, and target is es -> /
+  
+  // Simple replacement logic for now as we transition
+  // Ideally use `getRelativeLocaleUrl` but we need to pass the route
+  
+  if (targetLang === 'es') {
+     return currentPath.replace(/^\/en/, '') || '/';
+  } else {
+     if (currentPath.startsWith('/en')) return currentPath;
+     return `/en${currentPath === '/' ? '' : currentPath}`;
+  }
+}
+---
+<div class="flex items-center gap-2 text-sm font-bold">
+  {Object.entries(languages).map(([labelLang, label]) => (
+    <a
+      href={getLangPath(labelLang)}
+      onclick={`localStorage.setItem('lang-preference', '${labelLang}')`}
+      class={`
+        px-2 py-1 rounded transition-colors
+        ${(lang === labelLang || (labelLang === 'es' && !lang)) 
+          ? 'bg-accent text-white' 
+          : 'text-text-muted hover:text-text-primary hover:bg-bg-subtle'}
+      `}
+    >
+      {label === 'Español' ? 'ES' : 'EN'}
+    </a>
+  ))}
+</div>

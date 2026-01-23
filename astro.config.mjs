@@ -14,10 +14,18 @@ export function remarkReadingTime() {
   };
 }
 
-// https://astro.build/config
+
 export default defineConfig({
   site: 'https://fluxdv.icu/',
   output: 'static',
+
+  i18n: {
+    defaultLocale: "es",
+    locales: ["es", "en"],
+    routing: {
+      prefixDefaultLocale: false
+    }
+  },
 
   markdown: {
     remarkPlugins: [remarkReadingTime],

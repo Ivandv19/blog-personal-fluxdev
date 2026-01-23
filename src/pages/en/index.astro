@@ -1,11 +1,10 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { useTranslations } from '../i18n/ui';
+import Layout from '../../layouts/Layout.astro';
+import { useTranslations } from '../../i18n/ui';
 
-const lang = 'es';
+const lang = 'en';
 const t = useTranslations(lang);
 
-// Use a more robust path or import.meta.glob if Astro.glob fails
 const posts = import.meta.glob('./blog/*.md', { eager: true });
 const allPosts = Object.values(posts);
 
@@ -16,7 +15,7 @@ const postsOrdenados = allPosts.sort((a, b) =>
 );
 ---
 
-<Layout title="Inicio | Mi Blog">
+<Layout title="Home | Flux Blog">
     <section class="py-8 md:py-12">
         
         <h1 class="text-3xl md:text-4xl font-extrabold text-text-primary mb-6 tracking-tight">
@@ -39,7 +38,7 @@ const postsOrdenados = allPosts.sort((a, b) =>
                 <div class="flex flex-wrap gap-3">
                     {uniqueTags.map((tag) => (
                         <a 
-                            href={`/etiquetas/${tag}`} 
+                            href={`/en/tags/${tag}`} 
                             class="bg-bg-card border border-border-subtle text-text-secondary px-4 py-2 rounded-full text-sm font-medium hover:border-accent hover:text-accent hover:shadow-sm transition"
                         >
                             #{tag}
