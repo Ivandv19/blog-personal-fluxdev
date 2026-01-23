@@ -28,29 +28,29 @@ const { posts } = Astro.props;
 <Layout title={`Artículos sobre ${tag}`}>
   <div class="py-10">
     
-    <div class="mb-10 border-b border-stone-200 pb-4">
-      <p class="text-sm text-stone-500 uppercase tracking-widest font-bold">Explorando</p>
-      <h1 class="text-4xl font-bold text-stone-800 capitalize">
+    <div class="mb-10 border-b border-border-subtle pb-4">
+      <p class="text-sm text-text-muted uppercase tracking-widest font-bold">Explorando</p>
+      <h1 class="text-4xl font-bold text-text-primary capitalize">
         #{tag}
       </h1>
     </div>
 
     <ul class="grid gap-8">
       {posts.map((post) => (
-        <li class="bg-white p-6 rounded-lg shadow-sm border border-stone-100">
+        <li class="bg-bg-card p-6 rounded-lg shadow-sm border border-border-subtle hover:border-accent transition duration-300">
             <a href={post.url} class="block group">
-                <h2 class="text-2xl font-bold text-stone-800 group-hover:text-amber-700 transition">
+                <h2 class="text-2xl font-bold text-text-primary group-hover:text-accent transition">
                     {post.frontmatter.title}
                 </h2>
-                <p class="text-stone-600 mt-2 line-clamp-2">{post.frontmatter.description}</p>
-                <span class="text-sm font-bold text-amber-700 mt-4 block">Leer artículo &rarr;</span>
+                <p class="text-text-secondary mt-2 line-clamp-2">{post.frontmatter.description}</p>
+                <span class="text-sm font-bold text-accent mt-4 block">Leer artículo &rarr;</span>
             </a>
         </li>
       ))}
     </ul>
     
     <div class="mt-12">
-        <a href="/" class="text-stone-500 hover:text-stone-800 underline underline-offset-4">
+        <a href="/" class="text-text-muted hover:text-text-primary underline underline-offset-4">
             &larr; Volver al inicio
         </a>
     </div>

@@ -13,28 +13,28 @@ const postsOrdenados = allPosts.sort((a, b) =>
 <Layout title="Inicio | Mi Blog">
     <section class="py-8 md:py-12">
         
-        <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-6 tracking-tight">
-            Desarrollo de software, crecimiento personal, tutoriales y <span class="text-amber-700">un poco de mí.</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-text-primary mb-6 tracking-tight">
+            Desarrollo de software, crecimiento personal, tutoriales y <span class="text-accent">un poco de mí.</span>
         </h1>
         
         <div class="mb-10 max-w-2xl">
-            <p class="text-lg text-stone-600 leading-relaxed mb-6">
+            <p class="text-lg text-text-secondary leading-relaxed mb-6">
                 ¡Bienvenido a mi blog! Estaré compartiendo artículos sobre desarrollo de software, tecnología y productividad. Mi objetivo es ayudarte a crecer tanto profesional como personalmente con base en mis estudios, experiencia y aprendizajes.
             </p>
 
-            <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-900">
+            <div class="bg-accent-bg border border-accent/20 rounded-lg p-4 text-sm text-accent-text">
                 <p>⚠️ <strong>Nota:</strong> Esta página web es nueva, por ende es posible que tenga algunos bugs visuales, artículos que no cargan o mal rendimiento en general. No te preocupes si ves errores, estoy trabajando en ello :)</p>
             </div>
         </div>
 
         {uniqueTags.length > 0 && (
-            <div class="mb-12 border-b border-stone-200 pb-8">
-                <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-3">Temas Populares</p>
+            <div class="mb-12 border-b border-border-subtle pb-8">
+                <p class="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">Temas Populares</p>
                 <div class="flex flex-wrap gap-3">
                     {uniqueTags.map((tag) => (
                         <a 
                             href={`/etiquetas/${tag}`} 
-                            class="bg-white border border-stone-200 text-stone-600 px-4 py-2 rounded-full text-sm font-medium hover:border-amber-400 hover:text-amber-700 hover:shadow-sm transition"
+                            class="bg-bg-card border border-border-subtle text-text-secondary px-4 py-2 rounded-full text-sm font-medium hover:border-accent hover:text-accent hover:shadow-sm transition"
                         >
                             #{tag}
                         </a>
@@ -45,29 +45,29 @@ const postsOrdenados = allPosts.sort((a, b) =>
 
         <div class="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {postsOrdenados.map((post) => (
-                <article class="bg-white p-6 rounded-lg shadow-sm border border-stone-100 hover:border-amber-300 hover:shadow-md transition duration-300 flex flex-col h-full">
+                <article class="bg-bg-card p-6 rounded-lg shadow-sm border border-border-subtle hover:border-accent hover:shadow-md transition duration-300 flex flex-col h-full">
                     
                     <div class="flex justify-between items-center mb-3">
-                        <div class="flex items-center gap-2 text-xs text-stone-400 font-medium">
+                        <div class="flex items-center gap-2 text-xs text-text-muted font-medium">
                             <span>{post.frontmatter.date}</span>
                             <span>•</span>
-                            <span class="text-amber-700 font-bold bg-amber-50 px-2 py-0.5 rounded-full">
+                            <span class="text-accent font-bold bg-accent-bg px-2 py-0.5 rounded-full">
                                 {Math.ceil(post.frontmatter.minutesRead || 1)} min
                             </span>
                         </div>
                     </div>
 
-                    <h2 class="text-xl md:text-2xl font-bold mb-3 text-stone-800 leading-tight">
-                        <a href={post.url} class="hover:text-amber-700 transition-colors">
+                    <h2 class="text-xl md:text-2xl font-bold mb-3 text-text-primary leading-tight">
+                        <a href={post.url} class="hover:text-accent transition-colors">
                             {post.frontmatter.title}
                         </a>
                     </h2>
                     
-                    <p class="text-stone-600 mb-6 line-clamp-3 flex-grow text-sm md:text-base">
+                    <p class="text-text-secondary mb-6 line-clamp-3 flex-grow text-sm md:text-base">
                         {post.frontmatter.description}
                     </p>
 
-                    <a href={post.url} class="text-sm font-bold text-stone-900 hover:text-amber-700 flex items-center gap-1 group mt-auto">
+                    <a href={post.url} class="text-sm font-bold text-text-primary hover:text-accent flex items-center gap-1 group mt-auto">
                         Leer más 
                         <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
                     </a>
