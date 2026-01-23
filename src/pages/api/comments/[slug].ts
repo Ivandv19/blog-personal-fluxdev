@@ -45,7 +45,7 @@ export async function POST({ params, request, locals }: APIContext) {
         return new Response(JSON.stringify({ error: 'Captcha required' }), { status: 400 });
     }
 
-    const SECRET_KEY = '0x4AAAAAAACOf1TDtHdGeUKFjk77Gt1L4Hwk';
+    const SECRET_KEY = '1x0000000000000000000000000000000AA'; // TEST KEY
     
     const formData = new FormData();
     formData.append('secret', SECRET_KEY);
