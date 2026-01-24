@@ -2,7 +2,8 @@
 import { languages } from '../i18n/ui';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 
-const { lang } = Astro.params;
+const currentPath = Astro.url.pathname;
+const lang = currentPath.split('/')[1] === 'en' ? 'en' : 'es';
 
 function getLangPath(targetLang: string) {
   const currentPath = Astro.url.pathname;
