@@ -41,7 +41,7 @@ const { slug } = Astro.props;
             </div>
 
             <!-- Turnstile Widget -->
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAAACOf1Tx6fg28y6Ba"></div>
+            <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>
 
             <button 
                 type="submit" 
