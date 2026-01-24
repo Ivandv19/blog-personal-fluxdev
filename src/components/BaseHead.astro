@@ -5,6 +5,8 @@ interface Props {
 	title: string;
 	description: string;
 	image?: string;
+	type?: 'website' | 'article';
+	publishDate?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
@@ -33,5 +35,22 @@ const { title, description, image = '/banner-default.jpg' } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+{/* JSON-LD Structured Data */}
+<script is:inline type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": Astro.props.type === 'article' ? 'BlogPosting' : 'WebSite',
+  "headline": title,
+  "image": new URL(image, Astro.url),
+  "url": Astro.url,
+  "description": description,
+  "author": {
+      "@type": "Person",
+      "name": "Flux"
+  },
+  ...(Astro.props.type === 'article' ? {
+      "datePublished": Astro.props.publishDate,
+  } : {})
+})} />
 
 <GoogleAnalytics />
