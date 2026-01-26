@@ -139,3 +139,41 @@ body {
     --tw-prose-invert-th-borders: var(--border-subtle);
     --tw-prose-invert-td-borders: var(--border-subtle);
 }
+
+/* 
+  Animations 
+  Ported from portfolio
+*/
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0; /* Start hidden */
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Stagger delays */
+.animate-delay-100 { animation-delay: 100ms; }
+.animate-delay-200 { animation-delay: 200ms; }
+.animate-delay-300 { animation-delay: 300ms; }
+.animate-delay-500 { animation-delay: 500ms; }
+
+/* Ensure content is visible if animation fails or JS is disabled (progressive enhancement) 
+   Actually, with strict CSS animation 'forwards', it stays at 'to' state.
+   But if we want to be safe for no-js or prefers-reduced-motion:
+*/
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

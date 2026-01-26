@@ -100,7 +100,7 @@ const clientStrings = {
                 return;
             }
 
-            comments.forEach(comment => {
+            comments.forEach((comment, index) => {
                 const date = new Date(comment.created_at * 1000).toLocaleDateString(clientStrings.locale, {
                     year: 'numeric', month: 'long', day: 'numeric'
                 });
@@ -114,7 +114,9 @@ const clientStrings = {
                     .toUpperCase();
 
                 const div = document.createElement('div');
-                div.className = 'bg-bg-card p-5 rounded-lg border border-border-subtle shadow-sm flex gap-4 transition-transform hover:-translate-y-0.5 duration-300';
+                div.className = 'bg-bg-card p-5 rounded-lg border border-border-subtle shadow-sm flex gap-4 transition-transform hover:-translate-y-0.5 duration-300 animate-fade-in-up';
+                div.style.animationDelay = `${index * 100}ms`; // Stagger effect
+                
                 div.innerHTML = `
                     <div class="shrink-0 w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-bold text-sm select-none">
                         ${escapeHtml(initials)}
