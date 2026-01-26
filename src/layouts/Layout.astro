@@ -12,14 +12,15 @@ const {
 	image,
 	type = "website",
 	publishDate,
+    lang = defaultLang, // Default to defaultLang if not provided
 } = Astro.props;
 
-const lang = Astro.params.lang || defaultLang;
-const t = useTranslations(lang as any);
+const currentLang = lang || Astro.params.lang || defaultLang;
+const t = useTranslations(currentLang as any);
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={currentLang}>
     <head>
         <BaseHead title={title} description={description} image={image} type={type} publishDate={publishDate} />
         <script is:inline>
@@ -46,7 +47,7 @@ const t = useTranslations(lang as any);
         
         <header class="border-b border-border-subtle bg-bg-canvas/90 sticky top-0 backdrop-blur-sm z-40 transition-colors duration-300">
             <nav class="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center gap-4">
-                <a href={`/${lang === 'es' ? '' : lang}`} class="font-bold text-xl tracking-tight hover:text-accent transition-colors shrink-0">
+                <a href={`/${currentLang === 'es' ? '' : currentLang}`} class="font-bold text-xl tracking-tight hover:text-accent transition-colors shrink-0">
                     Flux
                 </a>
                 
@@ -58,7 +59,7 @@ const t = useTranslations(lang as any);
 
                 <div class="flex items-center gap-4 shrink-0">
                     <div class="hidden sm:block text-sm font-medium">
-                        <a href={`/${lang === 'es' ? '' : lang}`} class="hover:text-accent transition-colors">{t('nav.home')}</a>
+                        <a href={`/${currentLang === 'es' ? '' : currentLang}`} class="hover:text-accent transition-colors">{t('nav.home')}</a>
                     </div>
                     <LanguagePicker />
                     <ThemeToggle />

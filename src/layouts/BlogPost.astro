@@ -12,7 +12,7 @@ const lang = currentPath.split("/")[1] === "en" ? "en" : "es";
 const t = useTranslations(lang);
 ---
 
-<Layout title={frontmatter.title} description={frontmatter.description} type="article" publishDate={frontmatter.date}>
+<Layout title={frontmatter.title} description={frontmatter.description} type="article" publishDate={frontmatter.date} lang={lang}>
   <article class="prose prose-stone dark:prose-invert prose-base md:prose-lg mx-auto mt-6 mb-12 md:mt-10 md:mb-20">
     
     <div class="mb-6">
@@ -58,6 +58,6 @@ const t = useTranslations(lang);
     
     <ShareButtons title={frontmatter.title} url={Astro.url} />
 
-    <Comments slug={Astro.url.pathname.replace(/^\/|\/$/g, '').replaceAll('/', '-')} />
+    <Comments slug={Astro.url.pathname.replace(/^\/|\/$/g, '').replaceAll('/', '-')} lang={lang} />
   </article>
 </Layout>
