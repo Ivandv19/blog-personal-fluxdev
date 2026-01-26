@@ -1,6 +1,6 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { useTranslations, defaultLang } from '../i18n/ui';
+import Layout from "../layouts/Layout.astro";
+import { useTranslations, defaultLang } from "../i18n/ui";
 
 const lang = Astro.params.lang || defaultLang;
 const t = useTranslations(lang as any);

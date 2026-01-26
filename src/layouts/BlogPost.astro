@@ -1,14 +1,14 @@
 ---
-import Layout from './Layout.astro';
-import { useTranslations } from '../i18n/ui';
-import ShareButtons from '../components/ShareButtons.astro';
-import Comments from '../components/Comments.astro';
+import Layout from "./Layout.astro";
+import { useTranslations } from "../i18n/ui";
+import ShareButtons from "../components/ShareButtons.astro";
+import Comments from "../components/Comments.astro";
 
 const { frontmatter } = Astro.props;
 
 // Extract language from URL since we use static folders
 const currentPath = Astro.url.pathname;
-const lang = currentPath.split('/')[1] === 'en' ? 'en' : 'es';
+const lang = currentPath.split("/")[1] === "en" ? "en" : "es";
 const t = useTranslations(lang);
 ---
 

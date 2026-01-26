@@ -1,17 +1,17 @@
 ---
-import '../styles/global.css';
-import Search from '../components/Search.astro';
-import BaseHead from '../components/BaseHead.astro';
-import ThemeToggle from '../components/ThemeToggle.astro';
-import LanguagePicker from '../components/LanguagePicker.astro';
-import { useTranslations, defaultLang } from '../i18n/ui';
+import "../styles/global.css";
+import Search from "../components/Search.astro";
+import BaseHead from "../components/BaseHead.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import LanguagePicker from "../components/LanguagePicker.astro";
+import { useTranslations, defaultLang } from "../i18n/ui";
 
-const { 
-    title, 
-    description = "Un blog sobre desarrollo y tecnología.",
-    image,
-    type = 'website',
-    publishDate
+const {
+	title,
+	description = "Un blog sobre desarrollo y tecnología.",
+	image,
+	type = "website",
+	publishDate,
 } = Astro.props;
 
 const lang = Astro.params.lang || defaultLang;

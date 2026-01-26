@@ -2,9 +2,9 @@
 const { title, url } = Astro.props;
 
 const shareLinks = {
-  twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
-  linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-  // facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` // Optional
+	twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+	linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+	// facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` // Optional
 };
 ---
 

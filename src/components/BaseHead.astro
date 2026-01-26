@@ -1,16 +1,19 @@
 ---
-import GoogleAnalytics from './GoogleAnalytics.astro';
+import GoogleAnalytics from "./GoogleAnalytics.astro";
 
 interface Props {
 	title: string;
 	description: string;
 	image?: string;
-	type?: 'website' | 'article';
+	type?: "website" | "article";
 	publishDate?: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
-const { title, description, image = '/banner-default.jpg' } = Astro.props;
+const canonicalURL = new URL(
+	Astro.url.pathname,
+	Astro.site || Astro.url.origin,
+);
+const { title, description, image = "/banner-default.jpg" } = Astro.props;
 ---
 
 <meta charset="utf-8" />

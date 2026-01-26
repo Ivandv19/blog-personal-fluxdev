@@ -1,6 +1,6 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { useTranslations } from "../i18n/ui";
+import Layout from "../../layouts/Layout.astro";
+import { useTranslations } from "../../i18n/ui";
 
 export const prerender = true;
 
@@ -20,7 +20,7 @@ export async function getStaticPaths({ paginate }) {
 }
 
 const { page } = Astro.props;
-const lang = "es";
+const lang = "en";
 const t = useTranslations(lang);
 
 // Extract unique tags from all posts in the current page (or duplicates if we want global... typically global is better for the header)
@@ -46,7 +46,7 @@ const uniqueTags = Object.entries(tagCounts)
 	.map(([tag]) => tag);
 ---
 
-<Layout title="Inicio | Mi Blog">
+<Layout title="Home | Flux Blog">
     <section class="py-8 md:py-12">
         
         <h1 class="text-3xl md:text-4xl font-extrabold text-text-primary mb-6 tracking-tight">
@@ -65,7 +65,7 @@ const uniqueTags = Object.entries(tagCounts)
                 <div class="flex flex-wrap gap-3">
                     {uniqueTags.map((tag) => (
                         <a 
-                            href={`/etiquetas/${tag}`} 
+                            href={`/en/tags/${tag}`} 
                             class="bg-bg-card border border-border-subtle text-text-secondary px-4 py-2 rounded-full text-sm font-medium hover:border-accent hover:text-accent hover:shadow-sm transition"
                         >
                             #{tag}
@@ -108,14 +108,13 @@ const uniqueTags = Object.entries(tagCounts)
         </div>
 
         {/* Pagination Controls */}
-        {/* Pagination Controls */}
         <div class="flex justify-center items-center gap-2 mt-12">
             {/* Previous Page */}
             <a 
                 href={page.url.prev || '#'} 
                 class={`w-10 h-10 flex items-center justify-center rounded-full border border-border-subtle transition-colors ${!page.url.prev ? 'text-text-muted cursor-not-allowed opacity-50' : 'bg-bg-card hover:border-accent hover:text-accent'}`}
                 aria-disabled={!page.url.prev}
-                aria-label="Página anterior"
+                aria-label="Previous page"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
             </a>
@@ -124,7 +123,8 @@ const uniqueTags = Object.entries(tagCounts)
             <div class="flex items-center gap-1">
                 {Array.from({ length: page.lastPage }, (_, i) => i + 1).map((num) => {
                     const isCurrent = num === page.currentPage;
-                    const href = num === 1 ? '/' : `/${num}`;
+                    // Fix: Ensure links are relative to /en/
+                    const href = num === 1 ? '/en' : `/en/${num}`;
                     return (
                         <a 
                             href={href}
@@ -145,7 +145,7 @@ const uniqueTags = Object.entries(tagCounts)
                 href={page.url.next || '#'} 
                 class={`w-10 h-10 flex items-center justify-center rounded-full border border-border-subtle transition-colors ${!page.url.next ? 'text-text-muted cursor-not-allowed opacity-50' : 'bg-bg-card hover:border-accent hover:text-accent'}`}
                 aria-disabled={!page.url.next}
-                aria-label="Siguiente página"
+                aria-label="Next page"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
             </a>
