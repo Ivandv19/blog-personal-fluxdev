@@ -1,0 +1,17 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const lang = "es";
+---
+
+<Layout title="Términos y Condiciones | Flux Blog" lang={lang}>
+    <section class="max-w-3xl mx-auto py-12 prose prose-stone dark:prose-invert">
+        <h1>Términos y Condiciones</h1>
+        <p>Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
+        <p>Bienvenido a Flux Blog. Al acceder a este sitio web, aceptas cumplir con estos términos de servicio, todas las leyes y regulaciones aplicables, y aceptas que eres responsable del cumplimiento de las leyes locales aplicables.</p>
+        <h2>Licencia de Uso</h2>
+        <p>Se concede permiso para descargar temporalmente una copia de los materiales (información o software) en el sitio web de Flux Blog solo para visualización transitoria personal y no comercial.</p>
+        <h2>Descargo de Responsabilidad</h2>
+        <p>Los materiales en el sitio web de Flux Blog se proporcionan "tal cual". Flux Blog no ofrece garantías, expresas o implícitas, y por la presente renuncia y niega todas las otras garantías.</p>
+    </section>
+</Layout>

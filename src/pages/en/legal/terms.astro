@@ -1,0 +1,17 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+
+const lang = "en";
+---
+
+<Layout title="Terms and Conditions | Flux Blog" lang={lang}>
+    <section class="max-w-3xl mx-auto py-12 prose prose-stone dark:prose-invert">
+        <h1>Terms and Conditions</h1>
+        <p>Last updated: {new Date().toLocaleDateString('en-US')}</p>
+        <p>Welcome to Flux Blog. By accessing this website, you agree to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.</p>
+        <h2>Use License</h2>
+        <p>Permission is granted to temporarily download one copy of the materials (information or software) on Flux Blog's website for personal, non-commercial transitory viewing only.</p>
+        <h2>Disclaimer</h2>
+        <p>The materials on Flux Blog's website are provided on an 'as is' basis. Flux Blog makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties.</p>
+    </section>
+</Layout>

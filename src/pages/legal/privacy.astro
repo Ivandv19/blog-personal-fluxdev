@@ -1,0 +1,17 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const lang = "es";
+---
+
+<Layout title="Política de Privacidad | Flux Blog" lang={lang}>
+    <section class="max-w-3xl mx-auto py-12 prose prose-stone dark:prose-invert">
+        <h1>Política de Privacidad</h1>
+        <p>Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
+        <p>Tu privacidad es importante para nosotros. Es política de Flux Blog respetar tu privacidad con respecto a cualquier información que podamos recopilar de ti a través de nuestro sitio web.</p>
+        <h2>Información que recopilamos</h2>
+        <p>Solo solicitamos información personal cuando realmente la necesitamos para proporcionarte un servicio. La recopilamos por medios justos y legales, con tu conocimiento y consentimiento.</p>
+        <h2>Retención de datos</h2>
+        <p>Solo conservamos la información recopilada durante el tiempo necesario para proporcionarte el servicio solicitado. Los datos que almacenamos, los protegeremos dentro de medios comercialmente aceptables para evitar pérdidas y robos.</p>
+    </section>
+</Layout>
