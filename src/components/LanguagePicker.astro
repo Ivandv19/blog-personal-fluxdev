@@ -23,19 +23,78 @@ function getLangPath(targetLang: string) {
 	}
 }
 ---
-<div class="flex items-center gap-2 text-sm font-bold">
-  {Object.entries(languages).map(([labelLang, label]) => (
-    <a
-      href={getLangPath(labelLang)}
-      onclick={`localStorage.setItem('lang-preference', '${labelLang}')`}
-      class={`
-        px-2 py-1 rounded transition-colors
-        ${(lang === labelLang || (labelLang === 'es' && !lang)) 
-          ? 'bg-accent text-white' 
-          : 'text-text-muted hover:text-text-primary hover:bg-bg-subtle'}
-      `}
-    >
-      {label === 'Español' ? 'ES' : 'EN'}
-    </a>
-  ))}
+<div class="relative" id="lang-menu-container">
+  <button 
+    id="lang-menu-button"
+    class="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-bg-subtle/50 transition-colors text-text-muted hover:text-text-primary group"
+    aria-label="Change language"
+    aria-expanded="false"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-accent transition-colors">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="2" y1="12" x2="22" y2="12"></line>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+    </svg>
+    <span class="text-sm font-bold">{lang === 'es' ? 'ES' : 'EN'}</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50 group-hover:opacity-100 transition-opacity">
+      <path d="m6 9 6 6 6-6"/>
+    </svg>
+  </button>
+
+  <div 
+    id="lang-menu-dropdown"
+    class="absolute right-0 top-full mt-2 w-32 bg-bg-card/95 backdrop-blur-sm border border-border-subtle rounded-xl shadow-lg p-1 opacity-0 invisible translate-y-2 transition-all duration-200 z-50 transform origin-top-right"
+  >
+    {Object.entries(languages).map(([labelLang, label]) => (
+      <a
+        href={getLangPath(labelLang)}
+        onclick={`localStorage.setItem('lang-preference', '${labelLang}')`}
+        class={`
+          flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all
+          ${(lang === labelLang || (labelLang === 'es' && !lang && lang !== 'en')) 
+            ? 'bg-accent/10 text-accent' 
+            : 'text-text-secondary hover:bg-bg-subtle hover:text-text-primary'}
+        `}
+      >
+        <span class="w-1.5 h-1.5 rounded-full bg-accent opacity-0 transition-opacity ${(lang === labelLang || (labelLang === 'es' && !lang && lang !== 'en')) ? 'opacity-100' : ''}"></span>
+        {label === 'Español' ? 'Español' : 'English'}
+      </a>
+    ))}
+  </div>
 </div>
+
+<script is:inline>
+  const btn = document.getElementById('lang-menu-button');
+  const dropdown = document.getElementById('lang-menu-dropdown');
+  let isOpen = false;
+
+  function toggleMenu() {
+    isOpen = !isOpen;
+    btn.setAttribute('aria-expanded', isOpen);
+    if (isOpen) {
+      dropdown.classList.remove('invisible', 'opacity-0', 'translate-y-2');
+    } else {
+      dropdown.classList.add('invisible', 'opacity-0', 'translate-y-2');
+    }
+  }
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (isOpen && !btn.contains(e.target) && !dropdown.contains(e.target)) {
+      toggleMenu();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) {
+      toggleMenu();
+      btn.focus();
+    }
+  });
+</script>
