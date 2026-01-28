@@ -1,5 +1,6 @@
 ---
 layout: ../../layouts/BlogPost.astro
+ref_id: blog-futuro-web
 title: "El Futuro del Desarrollo Web: IA, WASM y Edge"
 date: "2026-01-22"
 description: "¿Hacia dónde va la web? Exploramos las tecnologías emergentes que redefinirán la próxima década."

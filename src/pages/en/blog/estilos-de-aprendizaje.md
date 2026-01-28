@@ -1,5 +1,6 @@
 ---
 layout: ../../../layouts/BlogPost.astro
+ref_id: blog-estilos-de-aprendizaje
 title: "Learning Styles"
 date: "2025-12-23"
 description: "Recognizing and understanding your learning style can improve your ability to learn."

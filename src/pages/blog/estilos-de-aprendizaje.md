@@ -1,5 +1,6 @@
 ---
 layout: ../../layouts/BlogPost.astro
+ref_id: blog-estilos-de-aprendizaje
 title: "Estilos de Aprendizaje"
 date: "2025-12-23"
 description: "Reconocer y comprender tu estilo de aprendizaje puede mejorar tu capacidad para aprender."

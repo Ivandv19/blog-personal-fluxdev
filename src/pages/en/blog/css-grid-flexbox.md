@@ -1,5 +1,6 @@
 ---
 layout: ../../../layouts/BlogPost.astro
+ref_id: blog-css-grid-flexbox
 title: "CSS Grid vs Flexbox: Which one to use and when?"
 date: "2026-01-20"
 description: "Understand the key differences between Grid and Flexbox and learn how to combine them to create modern, robust layouts."

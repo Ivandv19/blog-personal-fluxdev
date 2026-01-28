@@ -1,5 +1,6 @@
 ---
 layout: ../../../layouts/BlogPost.astro
+ref_id: blog-intro-typescript
 title: "Introduction to TypeScript: The Modern Standard"
 date: "2026-01-15"
 description: "Discover why TypeScript has become the undisputed standard for modern web development and how to start using it today."

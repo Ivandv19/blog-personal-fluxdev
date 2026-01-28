@@ -1,5 +1,6 @@
 ---
 layout: ../../layouts/BlogPost.astro
+ref_id: blog-control-de-versiones
 title: "Control de Versiones"
 date: "2025-12-23"
 description: "Un sistema que registra los cambios realizados en archivos a lo largo del tiempo, permitiendo recuperar versiones específicas."

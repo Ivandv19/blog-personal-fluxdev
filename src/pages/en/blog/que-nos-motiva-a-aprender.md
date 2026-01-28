@@ -1,5 +1,6 @@
 ---
 layout: ../../../layouts/BlogPost.astro
+ref_id: blog-que-nos-motiva-a-aprender
 title: "What Motivates Us to Learn? Key Factors for Growth"
 date: "2025-12-22"
 description: "Explore the internal and external drivers of learning and how to maximize your educational potential."

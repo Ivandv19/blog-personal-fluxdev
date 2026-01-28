@@ -1,5 +1,6 @@
 ---
 layout: ../../../layouts/BlogPost.astro
+ref_id: blog-guia-markdown
 title: "Quick Markdown Guide"
 date: "2026-01-05"
 description: "Learn the basic syntax of Markdown to write documentation, READMEs, and blog posts quickly and cleanly."

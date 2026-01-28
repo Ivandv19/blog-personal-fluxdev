@@ -4,6 +4,7 @@ import { useTranslations } from "../i18n/ui";
 import ShareButtons from "../components/ShareButtons.astro";
 import Comments from "../components/Comments.astro";
 
+
 const { frontmatter } = Astro.props;
 
 // Extract language from URL since we use static folders
@@ -58,6 +59,9 @@ const t = useTranslations(lang);
     
     <ShareButtons title={frontmatter.title} url={Astro.url} />
 
-    <Comments slug={Astro.url.pathname.replace(/^\/|\/$/g, '').replaceAll('/', '-')} lang={lang} />
+    <Comments 
+      slug={frontmatter.ref_id || Astro.url.pathname.replace(/^\/|\/$/g, '').replaceAll('/', '-')} 
+      lang={lang} 
+    />
   </article>
 </Layout>

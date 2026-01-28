@@ -1,5 +1,6 @@
 ---
 layout: ../../../layouts/BlogPost.astro
+ref_id: blog-lifelong-learning
 title: "Lifelong Learning: The Art of Never Stopping Learning"
 date: "2025-12-22"
 description: "Why learning doesn't end at school and how to adopt it as a lifestyle."

@@ -1,5 +1,6 @@
 ---
 layout: ../../../layouts/BlogPost.astro
+ref_id: blog-control-de-versiones
 title: "Version Control"
 date: "2025-12-23"
 description: "A system that records changes made to files over time, allowing you to recall specific versions later."

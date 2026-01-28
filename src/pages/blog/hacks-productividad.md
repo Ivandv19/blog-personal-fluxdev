@@ -1,5 +1,6 @@
 ---
 layout: ../../layouts/BlogPost.astro
+ref_id: blog-hacks-productividad
 title: "5 Hacks de Productividad para Desarrolladores"
 date: "2026-01-02"
 description: "Mejora tu flujo de trabajo con estos consejos prácticos y herramientas que todo desarrollador debería conocer."

@@ -1,5 +1,6 @@
 ---
 layout: ../../layouts/BlogPost.astro
+ref_id: blog-react-hooks
 title: "React Hooks: Guía Básica de useState y useEffect"
 date: "2026-01-10"
 description: "Aprende los fundamentos de los Hooks en React. useState para el estado y useEffect para los efectos secundarios, explicados con ejemplos simples."

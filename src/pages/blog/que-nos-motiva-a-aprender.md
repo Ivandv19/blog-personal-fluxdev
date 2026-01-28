@@ -1,5 +1,6 @@
 ---
 layout: ../../layouts/BlogPost.astro
+ref_id: blog-que-nos-motiva-a-aprender
 title: "¿Qué nos motiva a aprender? Factores clave para el crecimiento"
 date: "2025-12-22"
 description: "Explora los impulsores internos y externos del aprendizaje y cómo maximizar tu potencial educativo."

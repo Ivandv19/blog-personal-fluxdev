@@ -1,5 +1,6 @@
 ---
 layout: ../../layouts/BlogPost.astro
+ref_id: blog-lifelong-learning
 title: "Lifelong Learning: El arte de nunca dejar de aprender"
 date: "2025-12-22"
 description: "Por qué el aprendizaje no termina en la escuela y cómo adoptarlo como un estilo de vida."

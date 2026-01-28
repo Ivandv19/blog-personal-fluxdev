@@ -1,5 +1,6 @@
 ---
 layout: ../../../layouts/BlogPost.astro
+ref_id: blog-hacks-productividad
 title: "5 Productivity Hacks for Developers"
 date: "2026-01-02"
 description: "Improve your workflow with these practical tips and tools that every developer should know."
