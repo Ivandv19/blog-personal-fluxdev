@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fluxdv.icu/sitemap-index.xml
+Sitemap: https://fluxdev.mgdc.site/sitemap-index.xml

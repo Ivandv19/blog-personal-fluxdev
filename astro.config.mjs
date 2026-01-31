@@ -16,7 +16,7 @@ export function remarkReadingTime() {
 }
 
 export default defineConfig({
-	site: "https://fluxdv.icu/",
+	site: "https://fluxdev.mgdc.site/",
 	output: "static",
 	adapter: cloudflare(),
 
