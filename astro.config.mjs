@@ -41,11 +41,13 @@ export default defineConfig({
 	site: "https://fluxdev.mgdc.site/",
 
 	/**
-	 * Modo de salida: "static" genera HTML estático
+	 * Modo de salida: "static" genera HTML estático puro
 	 * Alternativas: "server" (SSR) o "hybrid" (mixto)
 	 *
-	 * Como es estático puro, no necesita adaptador de Cloudflare.
-	 * Cloudflare Pages puede servir HTML estático directamente.
+	 * Arquitectura de separación de responsabilidades:
+	 * - Astro: Solo genera HTML estático (sin adaptador)
+	 * - Hono Worker: Maneja toda la API (/api/*)
+	 * - Cloudflare Pages: Sirve estáticos + enruta API al Worker
 	 */
 	output: "static",
 
