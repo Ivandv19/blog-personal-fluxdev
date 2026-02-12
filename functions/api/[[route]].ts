@@ -201,4 +201,8 @@ app.post("/api/comments/:slug", validateSlug, async (c) => {
     }
 });
 
-export default app;
+/**
+ * Export para Cloudflare Pages Functions
+ * Pages Functions espera una exportación `onRequest` en vez de `export default`
+ */
+export const onRequest = app.fetch.bind(app);
