@@ -3,6 +3,18 @@ import { Hono } from "hono";
 import { z } from "zod";
 
 /**
+ * Tipo para Cloudflare Pages Functions
+ */
+type PagesFunction<Env = unknown> = (context: {
+    request: Request;
+    env: Env;
+    params: Record<string, string>;
+    waitUntil: (promise: Promise<unknown>) => void;
+    next: () => Promise<Response>;
+    data: Record<string, unknown>;
+}) => Response | Promise<Response>;
+
+/**
  * Tipos para Cloudflare Workers
  */
 type Env = {
@@ -203,6 +215,10 @@ app.post("/api/comments/:slug", validateSlug, async (c) => {
 
 /**
  * Export para Cloudflare Pages Functions
- * Pages Functions espera una exportación `onRequest` en vez de `export default`
+ * Pages Functions pasa un contexto diferente que Workers,
+ * necesitamos adaptar el handler de Hono
  */
-export const onRequest = app.fetch.bind(app);
+export const onRequest: PagesFunction<Env> = async (context) => {
+    return app.fetch(context.request, context.env);
+};
+
