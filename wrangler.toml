@@ -27,6 +27,6 @@ database_id = "744a94e3-069c-4f0e-8e2a-40358b2dc74b"  # ID único de la DB en Cl
 # Usado para rate limiting y cache de comentarios
 [[kv_namespaces]]
 binding = "KV"  # Nombre de la variable en el código
-id = "9b8d689e24443f8992fb2b91383df2"  # ID del KV namespace "posts-cache"
+id = "9b86fe89e24443fb892f1e2b91383d12"  # ID del KV namespace "posts-cache"
 
 
