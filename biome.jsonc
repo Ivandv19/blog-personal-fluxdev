@@ -1,0 +1,44 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
+	// Control de versiones (VCS)
+	// Permite a Biome integrarse con Git para ignorar archivos automáticamente
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true // Respeta .gitignore
+	},
+	// Configuración de archivos
+	"files": {
+		"ignoreUnknown": false // No ignora archivos desconocidos
+	},
+	// Formateador de código
+	// Biome formatea automáticamente tu código para mantener consistencia
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab" // Usa tabs en lugar de espacios
+	},
+	// Linter (análisis estático de código)
+	// Detecta errores y malas prácticas automáticamente
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true // Usa las reglas recomendadas por Biome
+		}
+	},
+	// Configuración específica de JavaScript/TypeScript
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double" // Usa comillas dobles ("") en lugar de simples ('')
+		}
+	},
+	// Asistente de código
+	// Ayuda con refactorizaciones y mejoras automáticas
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"source": {
+				"organizeImports": "on" // Organiza los imports automáticamente
+			}
+		}
+	}
+}

@@ -16,7 +16,8 @@ export const ui = {
 		"footer.copyright": "Flux.",
 		"footer.rights": "Todos los derechos reservados.",
 		"footer.developedBy": "Desarrollado por",
-		"footer.description": "Un espacio para compartir conocimientos sobre desarrollo, tecnología y crecimiento personal.",
+		"footer.description":
+			"Un espacio para compartir conocimientos sobre desarrollo, tecnología y crecimiento personal.",
 		"footer.nav": "Navegación",
 		"footer.legal": "Legal",
 		"footer.subscribe": "Suscríbete",
@@ -60,7 +61,8 @@ export const ui = {
 		"footer.copyright": "Flux.",
 		"footer.rights": "All rights reserved.",
 		"footer.developedBy": "Developed by",
-		"footer.description": "A space to share knowledge about development, technology, and personal growth.",
+		"footer.description":
+			"A space to share knowledge about development, technology, and personal growth.",
 		"footer.nav": "Navigation",
 		"footer.legal": "Legal",
 		"footer.subscribe": "Subscribe",

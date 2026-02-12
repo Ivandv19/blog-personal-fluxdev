@@ -1,6 +1,6 @@
 ---
-import { languages } from "../i18n/ui";
 import { getRelativeLocaleUrl } from "astro:i18n";
+import { languages } from "../i18n/ui";
 
 import { getTranslatedPath } from "../utils/posts";
 
@@ -9,10 +9,10 @@ const lang = currentPath.split("/")[1] === "en" ? "en" : "es";
 
 function getLangPath(targetLang: string) {
 	const currentPath = Astro.url.pathname;
-    
-    // Attempt to find a translated path for blog posts
-    const translatedPath = getTranslatedPath(currentPath, targetLang);
-    if (translatedPath) return translatedPath;
+
+	// Attempt to find a translated path for blog posts
+	const translatedPath = getTranslatedPath(currentPath, targetLang);
+	if (translatedPath) return translatedPath;
 
 	// Default naive replacement for other pages
 	if (targetLang === "es") {

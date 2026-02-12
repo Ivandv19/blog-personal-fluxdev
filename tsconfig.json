@@ -1,5 +1,11 @@
 {
+	// Configuración de TypeScript para Astro
+	// Extiende la configuración base recomendada por Astro
 	"extends": "astro/tsconfigs/base",
+	// Archivos a incluir en la compilación
+	// .astro/types.d.ts: Tipos generados automáticamente por Astro
+	// **/*: Todos los archivos del proyecto
 	"include": [".astro/types.d.ts", "**/*"],
+	// Excluir la carpeta de build de la compilación
 	"exclude": ["dist"]
 }

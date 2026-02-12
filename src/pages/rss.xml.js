@@ -1,5 +1,5 @@
 import rss from "@astrojs/rss";
-import { ui, defaultLang } from "../i18n/ui";
+import { defaultLang, ui } from "../i18n/ui";
 
 export async function GET(context) {
 	// Get all posts from both languages

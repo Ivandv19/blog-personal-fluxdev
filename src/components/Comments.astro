@@ -1,5 +1,6 @@
 ---
 const { slug, lang = "es" } = Astro.props;
+
 import { useTranslations } from "../i18n/ui";
 
 const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
@@ -7,14 +8,14 @@ const t = useTranslations(lang);
 
 // Pass translations to client-side
 const clientStrings = {
-    loading: t("comments.loading"),
-    empty: t("comments.empty"),
-    loadError: t("comments.loadError"),
-    submitting: t("comments.submitting"),
-    success: t("comments.success"),
-    error: t("comments.error"),
-    submit: t("comments.submit"),
-    locale: lang === "en" ? "en-US" : "es-ES"
+	loading: t("comments.loading"),
+	empty: t("comments.empty"),
+	loadError: t("comments.loadError"),
+	submitting: t("comments.submitting"),
+	success: t("comments.success"),
+	error: t("comments.error"),
+	submit: t("comments.submit"),
+	locale: lang === "en" ? "en-US" : "es-ES",
 };
 ---
 

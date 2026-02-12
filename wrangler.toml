@@ -1,9 +1,25 @@
+# Configuración de Wrangler para Cloudflare Pages
+# Wrangler es la CLI de Cloudflare para gestionar Workers y Pages
+
+# Nombre del proyecto en Cloudflare
 name = "blog-personal-fluxdev"
+
+# Fecha de compatibilidad para las APIs de Cloudflare
+# Define qué versión de las APIs de Workers se usa
 compatibility_date = "2026-02-06"
+
+# Directorio donde Astro genera el build estático
+# Cloudflare Pages sirve los archivos desde aquí
 pages_build_output_dir = "./dist"
+
+# Flags de compatibilidad
+# nodejs_compat: Habilita compatibilidad con APIs de Node.js en el Edge
 compatibility_flags = ["nodejs_compat"]
 
+# Configuración de base de datos D1 (SQLite en el Edge)
+# Usado para almacenar comentarios del blog
 [[d1_databases]]
-binding = "DB"
-database_name = "blog-comments"
-database_id = "744a94e3-069c-4f0e-8e2a-40358b2dc74b"
+binding = "DB"  # Nombre de la variable en el código
+database_name = "blog-comments"  # Nombre de la base de datos
+database_id = "744a94e3-069c-4f0e-8e2a-40358b2dc74b"  # ID único de la DB en Cloudflare
+

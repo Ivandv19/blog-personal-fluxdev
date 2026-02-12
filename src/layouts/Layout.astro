@@ -1,10 +1,10 @@
 ---
 import "../styles/global.css";
-import Search from "../components/Search.astro";
 import BaseHead from "../components/BaseHead.astro";
-import ThemeToggle from "../components/ThemeToggle.astro";
 import LanguagePicker from "../components/LanguagePicker.astro";
-import { useTranslations, defaultLang } from "../i18n/ui";
+import Search from "../components/Search.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import { defaultLang, useTranslations } from "../i18n/ui";
 
 const {
 	title,
@@ -12,17 +12,17 @@ const {
 	image,
 	type = "website",
 	publishDate,
-    lang = defaultLang, // Default to defaultLang if not provided
+	lang = defaultLang, // Default to defaultLang if not provided
 } = Astro.props;
 
 const currentLang = lang || Astro.params.lang || defaultLang;
 const t = useTranslations(currentLang as any);
 
 // Import Outfit Font
-import '@fontsource/outfit/300.css';
-import '@fontsource/outfit/400.css';
-import '@fontsource/outfit/500.css';
-import '@fontsource/outfit/700.css';
+import "@fontsource/outfit/300.css";
+import "@fontsource/outfit/400.css";
+import "@fontsource/outfit/500.css";
+import "@fontsource/outfit/700.css";
 ---
 
 <!doctype html>

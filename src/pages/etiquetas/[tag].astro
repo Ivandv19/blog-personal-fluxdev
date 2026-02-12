@@ -8,7 +8,7 @@ export async function getStaticPaths() {
 
 	// Sacamos todas las etiquetas únicas (Set elimina duplicados)
 	const uniqueTags = [
-		...new Set(allPosts.map((post) => post.frontmatter.tags).flat()),
+		...new Set(allPosts.flatMap((post) => post.frontmatter.tags)),
 	];
 
 	// Devolvemos una ruta por cada etiqueta encontrada
