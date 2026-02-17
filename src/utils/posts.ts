@@ -1,5 +1,9 @@
-export function getTranslatedPath(currentPath: string, targetLang: string) {
-	const posts = import.meta.glob("../pages/**/*.{md,mdx}", { eager: true });
+export function getPosts() {
+	return import.meta.glob("../pages/**/*.{md,mdx}", { eager: true });
+}
+
+export function getTranslatedPath(currentPath: string, targetLang: string, postsOverride?: any) {
+	const posts = postsOverride || getPosts();
 
 	// 1. Identify the current post based on the path
 	let refId: string | undefined;
