@@ -1,4 +1,5 @@
 ---
+// Pagina de inicio paginada (Ingles)
 import { useTranslations } from "../../i18n/ui";
 import Layout from "../../layouts/Layout.astro";
 
@@ -8,14 +9,14 @@ export async function getStaticPaths({ paginate }) {
 	const posts = import.meta.glob("./blog/*.md", { eager: true });
 	const allPosts = Object.values(posts);
 
-	// Sort posts by date
+	// Ordenar posts por fecha (mas recientes primero)
 	const sortedPosts = allPosts.sort(
 		(a, b) =>
 			new Date(b.frontmatter.date).valueOf() -
 			new Date(a.frontmatter.date).valueOf(),
 	);
 
-	// Pagination: 6 posts per page
+	// Paginacion: 6 posts por pagina
 	return paginate(sortedPosts, { pageSize: 6 });
 }
 
@@ -23,15 +24,11 @@ const { page } = Astro.props;
 const lang = "en";
 const t = useTranslations(lang);
 
-// Extract unique tags from all posts in the current page (or duplicates if we want global... typically global is better for the header)
-// Actually, let's keep unique tags global. We need to re-fetch all posts or pass them differently?
-// getStaticPaths is unrelated to component instance.
-// We can't access 'allPosts' here easily unless we pass it via props or re-import.
-// Re-importing is cheap in SSG.
+// Obtener todos los posts para calcular etiquetas globales
 const postsGlob = import.meta.glob("./blog/*.md", { eager: true });
 const globalPosts = Object.values(postsGlob);
 
-// Calculate tag counts
+// Calcular la frecuencia de cada etiqueta
 const tagCounts = globalPosts
 	.flatMap((post) => post.frontmatter.tags || [])
 	.reduce((acc, tag) => {
@@ -39,7 +36,7 @@ const tagCounts = globalPosts
 		return acc;
 	}, {});
 
-// Sort by count (desc) and take top 10
+// Ordenar por frecuencia y tomar las 10 principales
 const uniqueTags = Object.entries(tagCounts)
 	.sort(([, a], [, b]) => b - a)
 	.slice(0, 10)
@@ -48,7 +45,7 @@ const uniqueTags = Object.entries(tagCounts)
 
 <Layout title="Home | Flux Blog" lang="en">
     <section class="py-8 md:py-12">
-        
+        <!-- Seccion de bienvenida -->
         <h1 class="text-3xl md:text-4xl font-extrabold text-text-primary mb-6 tracking-tight">
             {t('home.hero.title')} <span class="text-accent">{t('home.hero.subtitle')}</span>
         </h1>
@@ -60,6 +57,7 @@ const uniqueTags = Object.entries(tagCounts)
         </div>
 
         {uniqueTags.length > 0 && (
+            <!-- Listado de etiquetas populares -->
             <div class="mb-12 border-b border-border-subtle pb-8">
                 <p class="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">{t('home.popular')}</p>
                 <div class="flex flex-wrap gap-3">
@@ -75,8 +73,10 @@ const uniqueTags = Object.entries(tagCounts)
             </div>
         )}
 
+        <!-- Cuadricula de articulos -->
         <div class="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {page.data.map((post) => (
+                <!-- Tarjeta de post individual -->
                 <article class="bg-bg-card p-6 rounded-lg shadow-sm border border-border-subtle hover:border-accent hover:shadow-md transition duration-300 flex flex-col h-full">
                     
                     <div class="flex justify-between items-center mb-3">
@@ -107,23 +107,23 @@ const uniqueTags = Object.entries(tagCounts)
             ))}
         </div>
 
-        {/* Pagination Controls */}
+        <!-- Controles de paginacion -->
         <div class="flex justify-center items-center gap-2 mt-12">
-            {/* Previous Page */}
+            <!-- Pagina anterior -->
             <a 
                 href={page.url.prev || '#'} 
                 class={`w-10 h-10 flex items-center justify-center rounded-full border border-border-subtle transition-colors ${!page.url.prev ? 'text-text-muted cursor-not-allowed opacity-50' : 'bg-bg-card hover:border-accent hover:text-accent'}`}
                 aria-disabled={!page.url.prev}
                 aria-label="Previous page"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                <span class="icon-[solar--alt-arrow-left-outline] w-5 h-5"></span>
             </a>
 
-            {/* Page Numbers */}
+            <!-- Numeros de pagina -->
             <div class="flex items-center gap-1">
                 {Array.from({ length: page.lastPage }, (_, i) => i + 1).map((num) => {
                     const isCurrent = num === page.currentPage;
-                    // Fix: Ensure links are relative to /en/
+                    // Asegurar que los enlaces sean relativos a /en/
                     const href = num === 1 ? '/en' : `/en/${num}`;
                     return (
                         <a 
@@ -140,14 +140,14 @@ const uniqueTags = Object.entries(tagCounts)
                 })}
             </div>
 
-            {/* Next Page */}
+            <!-- Pagina siguiente -->
             <a 
                 href={page.url.next || '#'} 
                 class={`w-10 h-10 flex items-center justify-center rounded-full border border-border-subtle transition-colors ${!page.url.next ? 'text-text-muted cursor-not-allowed opacity-50' : 'bg-bg-card hover:border-accent hover:text-accent'}`}
                 aria-disabled={!page.url.next}
                 aria-label="Next page"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                <span class="icon-[solar--alt-arrow-right-outline] w-5 h-5"></span>
             </a>
         </div>
     </section>

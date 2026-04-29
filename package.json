@@ -13,29 +13,31 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"@astrojs/check": "^0.9.6",
-		"@astrojs/rss": "^4.0.15",
-		"@astrojs/sitemap": "^3.7.0",
+		"@astrojs/check": "^0.9.9",
+		"@astrojs/rss": "^4.0.18",
+		"@astrojs/sitemap": "^3.7.2",
 		"@fontsource/outfit": "^5.2.8",
-		"@tailwindcss/vite": "^4.2.1",
-		"astro": "^5.18.0",
-		"hono": "^4.12.5",
+		"@tailwindcss/vite": "^4.2.4",
+		"astro": "^6.1.10",
+		"hono": "^4.12.15",
 		"mdast-util-to-string": "^4.0.0",
-		"pagefind": "^1.4.0",
+		"pagefind": "^1.5.2",
 		"reading-time": "^1.5.0",
-		"tailwindcss": "^4.2.1",
+		"tailwindcss": "^4.2.4",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.6",
-		"@cloudflare/workers-types": "^4.20260305.1",
+		"@biomejs/biome": "^2.4.13",
+		"@cloudflare/workers-types": "^4.20260429.1",
+		"@iconify/json": "^2.2.467",
+		"@iconify/tailwind4": "^1.2.3",
 		"@tailwindcss/typography": "^0.5.19",
 		"@testing-library/dom": "^10.4.1",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@types/mdast": "^4.0.4",
-		"jsdom": "^28.1.0",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.18",
-		"wrangler": "^4.71.0"
+		"jsdom": "^29.1.0",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.5",
+		"wrangler": "^4.86.0"
 	}
 }

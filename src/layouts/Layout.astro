@@ -1,4 +1,5 @@
 ---
+// Layout principal del sitio con Header, Footer e Internacionalizacion
 import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
 import LanguagePicker from "../components/LanguagePicker.astro";
@@ -12,13 +13,13 @@ const {
 	image,
 	type = "website",
 	publishDate,
-	lang = defaultLang, // Default to defaultLang if not provided
+	lang = defaultLang, // Usar idioma base si no se especifica
 } = Astro.props;
 
 const currentLang = lang || Astro.params.lang || defaultLang;
 const t = useTranslations(currentLang as any);
 
-// Import Outfit Font
+// Importacion de la fuente Outfit
 import "@fontsource/outfit/300.css";
 import "@fontsource/outfit/400.css";
 import "@fontsource/outfit/500.css";
@@ -30,20 +31,17 @@ import "@fontsource/outfit/700.css";
     <head>
         <BaseHead title={title} description={description} image={image} type={type} publishDate={publishDate} />
         <script is:inline>
-            // 1. Theme Check
+            // Persistencia del tema claro/oscuro
             if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
             } else {
                 document.documentElement.classList.remove('dark');
             }
 
-            // 2. Language Auto-Redirect (Only on root '/')
-            // Checks if user prefers English and hasn't manually selected Spanish (optional constraint)
-            // Ideally we check if we are at root and user has 'en' preference
+            // Redireccion automatica de idioma segun el navegador (solo en la raiz)
             if (window.location.pathname === '/' && !localStorage.getItem('lang-preference')) {
                 const userLang = navigator.language || navigator.userLanguage;
                 if (userLang.startsWith('en')) {
-                    // Redirect to English
                     window.location.href = '/en/';
                 }
             }
@@ -57,6 +55,7 @@ import "@fontsource/outfit/700.css";
                     Flux
                 </a>
                 
+                <!-- Buscador central -->
                 <div class="flex-1 relative flex justify-center items-center">
                      <div class="w-full max-w-md">
                         <Search />
@@ -64,7 +63,7 @@ import "@fontsource/outfit/700.css";
                 </div>
 
                 <div class="flex items-center gap-2 shrink-0">
-                    {/* Desktop Navigation */}
+                    <!-- Navegacion de escritorio -->
                     <div class="hidden sm:flex items-center gap-0">
                         <div class="text-sm font-medium flex items-center gap-4 mr-2">
                             <a href={`/${currentLang === 'es' ? '' : currentLang}`} class="hover:text-accent transition-colors">{t('nav.home')}</a>
@@ -74,20 +73,18 @@ import "@fontsource/outfit/700.css";
                         <ThemeToggle />
                     </div>
 
-                    {/* Mobile Hamburger Menu */}
+                    <!-- Boton menu movil -->
                     <button 
                         id="mobile-menu-button" 
                         class="sm:hidden p-2 hover:bg-bg-subtle rounded-md transition-colors"
-                        aria-label="Toggle menu"
+                        aria-label="Alternar menu"
                     >
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
+                        <span class="icon-[solar--hamburger-menu-outline] w-6 h-6"></span>
                     </button>
                 </div>
             </nav>
 
-            {/* Mobile Menu Dropdown */}
+            <!-- Dropdown del menu movil -->
             <div 
                 id="mobile-menu" 
                 class="hidden sm:hidden border-t border-border-subtle bg-bg-canvas"
@@ -106,12 +103,12 @@ import "@fontsource/outfit/700.css";
                         {t('nav.about')}
                     </a>
                     
-                    {/* Separator */}
+                    <!-- Separador -->
                     <div class="border-t border-border-subtle my-2"></div>
                     
-                    {/* Language and Theme Selectors - Mobile Version */}
+                    <!-- Selectores de idioma y tema (Versión Móvil) -->
                     <div class="px-4 py-2 flex flex-col gap-3">
-                        {/* Language Selector - Inline */}
+                        <!-- Selector de idioma en linea -->
                         <div class="flex flex-col gap-2">
                             <span class="text-xs font-bold text-text-muted uppercase tracking-wider">Idioma / Language</span>
                             <div class="flex gap-2">
@@ -140,21 +137,17 @@ import "@fontsource/outfit/700.css";
                             </div>
                         </div>
                         
-                        {/* Theme Toggle - Mobile Version */}
+                        <!-- Selector de tema movil -->
                         <div class="flex flex-col gap-2">
                             <span class="text-xs font-bold text-text-muted uppercase tracking-wider">Tema / Theme</span>
                             <button
                                 id="mobile-theme-toggle"
                                 type="button"
                                 class="px-3 py-2 rounded-lg text-sm font-medium bg-bg-subtle hover:bg-bg-subtle/70 transition-all flex items-center justify-center gap-2"
-                                aria-label="Toggle Dark Mode"
+                                aria-label="Cambiar tema"
                             >
-                                <svg id="mobile-theme-icon-dark" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                                </svg>
-                                <svg id="mobile-theme-icon-light" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 011.414-1.414zM17 11a1 1 0 100-2 1 1 0 000 2zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 13.536l-.707.707a1 1 0 001.414 1.414l.707-.707a1 1 0 00-1.414-1.414zM4 11a1 1 0 100-2 1 1 0 000 2z" fill-rule="evenodd" clip-rule="evenodd"></path>
-                                </svg>
+                                <span id="mobile-theme-icon-dark" class="hidden icon-[solar--moon-stars-outline] w-5 h-5"></span>
+                                <span id="mobile-theme-icon-light" class="hidden icon-[solar--sun-2-outline] w-5 h-5"></span>
                                 <span id="mobile-theme-text">Modo Oscuro</span>
                             </button>
                         </div>
@@ -164,7 +157,7 @@ import "@fontsource/outfit/700.css";
         </header>
 
         <script>
-            // Mobile menu toggle
+            // Control del menu movil
             const menuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
 
@@ -172,27 +165,27 @@ import "@fontsource/outfit/700.css";
                 mobileMenu?.classList.toggle('hidden');
             });
 
-            // Close menu when clicking outside
+            // Cerrar el menu al hacer clic fuera del mismo
             document.addEventListener('click', (e) => {
                 if (!menuButton?.contains(e.target as Node) && !mobileMenu?.contains(e.target as Node)) {
                     mobileMenu?.classList.add('hidden');
                 }
             });
 
-            // Close menu on navigation
+            // Cerrar el menu al navegar a otra pagina
             mobileMenu?.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => {
                     mobileMenu?.classList.add('hidden');
                 });
             });
 
-            // Mobile theme toggle
+            // Control del tema en la version movil
             const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
             const mobileDarkIcon = document.getElementById('mobile-theme-icon-dark');
             const mobileLightIcon = document.getElementById('mobile-theme-icon-light');
             const mobileThemeText = document.getElementById('mobile-theme-text');
 
-            // Set initial state for mobile theme toggle
+            // Sincronizar el estado inicial del toggle movil con el tema actual
             function updateMobileThemeUI() {
                 const isDark = document.documentElement.classList.contains('dark');
                 if (isDark) {
@@ -213,7 +206,7 @@ import "@fontsource/outfit/700.css";
                 mobileDarkIcon?.classList.toggle('hidden');
                 mobileLightIcon?.classList.toggle('hidden');
 
-                // Toggle theme
+                // Alternar el tema y persistir en localStorage
                 if (localStorage.getItem('color-theme')) {
                     if (localStorage.getItem('color-theme') === 'light') {
                         document.documentElement.classList.add('dark');
@@ -243,7 +236,7 @@ import "@fontsource/outfit/700.css";
         <footer class="border-t border-border-subtle mt-auto pt-16 pb-8 transition-colors duration-300">
             <div class="max-w-6xl mx-auto px-4 sm:px-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-                    {/* Brand & Description */}
+                    <!-- Identidad y descripcion -->
                     <div class="flex flex-col gap-4">
                         <a href={`/${currentLang === 'es' ? '' : currentLang}`} class="font-bold text-2xl tracking-tight hover:text-accent transition-colors">
                             Flux
@@ -252,19 +245,20 @@ import "@fontsource/outfit/700.css";
                             {t('footer.description')}
                         </p>
                         <div class="flex gap-4 mt-2">
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-all hover:scale-110" aria-label="Instagram">
-                                <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-all hover:scale-110 flex items-center" aria-label="Instagram">
+                                <span class="icon-[ri--instagram-line] w-5 h-5"></span>
                             </a>
-                            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-all hover:scale-110" aria-label="YouTube">
-                                <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-all hover:scale-110 flex items-center" aria-label="YouTube">
+                                <span class="icon-[ri--youtube-fill] w-5 h-5"></span>
                             </a>
-                            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-all hover:scale-110" aria-label="GitHub">
-                                <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-all hover:scale-110 flex items-center" aria-label="GitHub">
+                                <span class="icon-[ri--github-fill] w-5 h-5"></span>
                             </a>
                         </div>
                     </div>
+                    </div>
 
-                    {/* Navigation */}
+                    <!-- Navegacion del pie de pagina -->
                     <div class="flex flex-col gap-4">
                         <h3 class="font-bold text-text-primary uppercase tracking-wider text-sm">{t('footer.nav')}</h3>
                         <ul class="flex flex-col gap-3 text-sm text-text-muted">
@@ -273,7 +267,7 @@ import "@fontsource/outfit/700.css";
                         </ul>
                     </div>
 
-                    {/* Legal */}
+                    <!-- Enlaces legales -->
                     <div class="flex flex-col gap-4">
                         <h3 class="font-bold text-text-primary uppercase tracking-wider text-sm">{t('footer.legal')}</h3>
                         <ul class="flex flex-col gap-3 text-sm text-text-muted">
@@ -282,7 +276,7 @@ import "@fontsource/outfit/700.css";
                         </ul>
                     </div>
 
-                    {/* Subscribe */}
+                    <!-- Formulario de suscripcion -->
                     <div class="flex flex-col gap-4">
                         <h3 class="font-bold text-text-primary uppercase tracking-wider text-sm">{t('footer.subscribe')}</h3>
                         <form class="flex flex-col gap-3" onsubmit="event.preventDefault();">
@@ -299,7 +293,7 @@ import "@fontsource/outfit/700.css";
                 </div>
 
                 <div class="border-t border-border-subtle pt-8 flex flex-col items-center gap-6">
-                    {/* Branding and Tech Tags */}
+                    <!-- Tecnologias utilizadas -->
                     <div class="flex flex-col items-center gap-4">
                         <p class="text-sm font-medium text-text-secondary">
                             {t('footer.developedBy')} <span class="font-bold text-text-primary">Sinx</span>
@@ -313,7 +307,7 @@ import "@fontsource/outfit/700.css";
                         </div>
                     </div>
 
-                    {/* Rights Reserved */}
+                    <!-- Derechos de autor -->
                     <p class="text-xs text-text-muted">
                         &copy; {new Date().getFullYear()} {t('footer.copyright')} {t('footer.rights')}
                     </p>

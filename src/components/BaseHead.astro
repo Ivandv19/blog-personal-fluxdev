@@ -1,59 +1,168 @@
 ---
+/**
+ * Componente principal para la gestion de metadatos SEO, Open Graph, Twitter Cards y analiticas.
+ */
+
 import UmamiAnalytics from "./UmamiAnalytics.astro";
 
+// Tipos y props para el componente
+
+/**
+ * @property {string} title - Titulo de la pagina (50-60 chars recomendado)
+ * @property {string} description - Meta descripcion (150-160 chars)
+ * @property {string} [image="/banner-default.jpg"] - URL relativa, se resuelve a absoluta
+ * @property {'website'|'article'} [type="website"] - "article" activa publishDate en JSON-LD
+ * @property {string} [publishDate] - Formato ISO 8601, solo si type="article"
+ */
 interface Props {
-	title: string;
-	description: string;
-	image?: string;
-	type?: "website" | "article";
-	publishDate?: string;
+  title: string;
+  description: string;
+  image?: string;
+  type?: "website" | "article";
+  publishDate?: string;
 }
 
+// Resolucion de URLs absolutas para SEO
+
+/**
+ * Genera la URL canonica absoluta.
+ * Requiere definir 'site' en astro.config.mjs.
+ */
 const canonicalURL = new URL(
-	Astro.url.pathname,
-	Astro.site || Astro.url.origin,
+  Astro.url.pathname,
+  Astro.site || Astro.url.origin,
 );
+
+// Valores por defecto para las props
+
 const { title, description, image = "/banner-default.jpg" } = Astro.props;
+
+// Fallback de imagen por defecto para redes sociales.
+// Asegurar que /banner-default.jpg exista en public/ y sea 1200x630px.
+
+// Validaciones en modo desarrollo
+
+if (import.meta.env.DEV) {
+  if (title.length > 60) {
+    console.warn(`[SeoMeta] Titulo muy largo (${title.length} chars).`);
+  }
+  if (description.length > 160) {
+    console.warn(
+      `[SeoMeta] Descripcion muy larga (${description.length} chars).`,
+    );
+  }
+
+  if (Astro.props.type === "article" && Astro.props.publishDate) {
+    const date = new Date(Astro.props.publishDate);
+    if (isNaN(date.getTime())) {
+      console.warn(
+        `[SeoMeta] publishDate invalido: "${Astro.props.publishDate}". Usar ISO 8601.`,
+      );
+    }
+  }
+}
 ---
 
+<!-- Configuracion base del documento -->
 <meta charset="utf-8" />
+
+<!-- Viewport responsive: esencial para mobile-first y SEO -->
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- Favicon: mostrado en pestañas del navegador y bookmarks -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Generador de la pagina -->
 <meta name="generator" content={Astro.generator} />
 
+<!-- URL canonica -->
 <link rel="canonical" href={canonicalURL} />
 
+<!-- Etiquetas SEO principales -->
+
+<!-- Titulo de la pagina -->
 <title>{title}</title>
+
+<!-- Meta Titulo -->
 <meta name="title" content={title} />
+
+<!-- Meta Descripcion -->
 <meta name="description" content={description} />
 
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<!-- Open Graph / Facebook -->
+
+<!-- Tipo de contenido (OG) -->
+<meta property="og:type" content={Astro.props.type ?? "website"} />
+
+<!-- URL (OG) -->
+<meta property="og:url" content={canonicalURL} />
+
+<!-- Titulo (OG) -->
 <meta property="og:title" content={title} />
+
+<!-- og:description: Descripción en preview de redes sociales -->
+<!-- Puede ser más larga que la meta description (hasta ~200 chars visibles) -->
 <meta property="og:description" content={description} />
+
+<!-- og:image: Imagen para redes sociales. Debe ser URL absoluta. -->
 <meta property="og:image" content={new URL(image, Astro.url)} />
 
+<!-- og:image:width y height (opcional pero recomendado para carga más rápida del preview) -->
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<!-- Twitter Cards -->
+
+<!-- twitter:card: Tipo de tarjeta. "summary_large_image" muestra imagen grande -->
+<!-- Opciones: summary (120x120), summary_large_image (1200x600) -->
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
+
+<!-- URL (Twitter) -->
+<meta property="twitter:url" content={canonicalURL} />
+
+<!-- twitter:title/description/image: Mismos principios que Open Graph -->
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
-{/* JSON-LD Structured Data */}
-<script is:inline type="application/ld+json" set:html={JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": Astro.props.type === 'article' ? 'BlogPosting' : 'WebSite',
-  "headline": title,
-  "image": new URL(image, Astro.url),
-  "url": Astro.url,
-  "description": description,
-  "author": {
-      "@type": "Person",
-      "name": "Flux"
-  },
-  ...(Astro.props.type === 'article' ? {
-      "datePublished": Astro.props.publishDate,
-  } : {})
-})} />
+<meta property="twitter:site" content="@miUsuario" />
 
+<!-- Datos estructurados JSON-LD -->
+
+
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    // Tipo condicional: BlogPosting para artículos, WebSite para páginas generales
+    "@type": Astro.props.type === "article" ? "BlogPosting" : "WebSite",
+
+    // Campos base (comunes a ambos tipos)
+    headline: title,
+    image: new URL(image, Astro.url),
+    url: canonicalURL,
+    description: description,
+
+    // Autor: centralizar en constante si el sitio tiene múltiples autores
+    author: {
+      "@type": "Person",
+      name: "Flux",
+    },
+
+    // Campos condicionales: solo para tipo "article"
+    ...(Astro.props.type === "article" && Astro.props.publishDate
+      ? {
+          datePublished: Astro.props.publishDate,
+        }
+      : {}),
+  })}
+/>
+
+<!-- Analiticas: Umami (Privacy-friendly) -->
+
+<!-- 
+  Integracion con Umami Analytics para tracking de visitas de forma anonima.
+-->
 <UmamiAnalytics />

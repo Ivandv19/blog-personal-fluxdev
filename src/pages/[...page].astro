@@ -1,153 +1,200 @@
 ---
+/**
+ * Página de inicio en español con listado paginado de artículos y etiquetas populares.
+ */
+
 import { useTranslations } from "../i18n/ui";
 import Layout from "../layouts/Layout.astro";
 
 export const prerender = true;
 
+/**
+ * Genera las rutas estáticas para paginación del listado de posts.
+ * @param {Function} paginate - Función de Astro para generar páginas paginadas
+ * @returns {Promise<Array>} Array de objetos page con posts ordenados por fecha
+ */
 export async function getStaticPaths({ paginate }) {
-	const posts = import.meta.glob("./blog/*.md", { eager: true });
-	const allPosts = Object.values(posts);
+    // 1. Importar todos los archivos .md de la carpeta blog
+    const posts = import.meta.glob("./blog/*.md", { eager: true });
+    const allPosts = Object.values(posts);
 
-	// Sort posts by date
-	const sortedPosts = allPosts.sort(
-		(a, b) =>
-			new Date(b.frontmatter.date).valueOf() -
-			new Date(a.frontmatter.date).valueOf(),
-	);
+    // 2. Ordenar posts por fecha descendente (más recientes primero)
+    const sortedPosts = allPosts.sort(
+        (a, b) =>
+            new Date(b.frontmatter.date).valueOf() -
+            new Date(a.frontmatter.date).valueOf(),
+    );
 
-	// Pagination: 6 posts per page
-	return paginate(sortedPosts, { pageSize: 6 });
+    // 3. Generar páginas con 6 posts por página
+    return paginate(sortedPosts, { pageSize: 6 });
 }
 
 const { page } = Astro.props;
 const lang = "es";
 const t = useTranslations(lang);
 
-// Extract unique tags from all posts in the current page (or duplicates if we want global... typically global is better for the header)
-// Actually, let's keep unique tags global. We need to re-fetch all posts or pass them differently?
-// getStaticPaths is unrelated to component instance.
-// We can't access 'allPosts' here easily unless we pass it via props or re-import.
-// Re-importing is cheap in SSG.
+// Calcular etiquetas populares: frecuencia global de tags en todos los posts
 const postsGlob = import.meta.glob("./blog/*.md", { eager: true });
 const globalPosts = Object.values(postsGlob);
 
-// Calculate tag counts
+// 1. Extraer todos los tags de todos los posts
+// 2. Contar frecuencia de cada tag
+// 3. Ordenar por frecuencia descendente y tomar top 10
 const tagCounts = globalPosts
-	.flatMap((post) => post.frontmatter.tags || [])
-	.reduce((acc, tag) => {
-		acc[tag] = (acc[tag] || 0) + 1;
-		return acc;
-	}, {});
+    .flatMap((post) => post.frontmatter.tags || [])
+    .reduce((acc, tag) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+        return acc;
+    }, {});
 
-// Sort by count (desc) and take top 10
 const uniqueTags = Object.entries(tagCounts)
-	.sort(([, a], [, b]) => b - a)
-	.slice(0, 10)
-	.map(([tag]) => tag);
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 10)
+    .map(([tag]) => tag);
 ---
 
 <Layout title="Inicio | Mi Blog" lang="es">
     <section class="py-8 md:py-12">
-        
-        <h1 class="text-3xl md:text-4xl font-extrabold text-text-primary mb-6 tracking-tight">
-            {t('home.hero.title')} <span class="text-accent">{t('home.hero.subtitle')}</span>
+        {/* Sección hero: título principal y texto de bienvenida */}
+        <h1
+            class="text-3xl md:text-4xl font-extrabold text-text-primary mb-6 tracking-tight"
+        >
+            {t("home.hero.title")}
+            <span class="text-accent">{t("home.hero.subtitle")}</span>
         </h1>
 
         <div class="mb-10 max-w-2xl">
             <p class="text-lg text-text-secondary leading-relaxed mb-6">
-                {t('home.welcome')}
+                {t("home.welcome")}
             </p>
         </div>
 
-        {uniqueTags.length > 0 && (
-            <div class="mb-12 border-b border-border-subtle pb-8">
-                <p class="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">{t('home.popular')}</p>
-                <div class="flex flex-wrap gap-3">
-                    {uniqueTags.map((tag) => (
-                        <a 
-                            href={`/etiquetas/${tag}`} 
-                            class="bg-bg-card border border-border-subtle text-text-secondary px-4 py-2 rounded-full text-sm font-medium hover:border-accent hover:text-accent hover:shadow-sm transition"
-                        >
-                            #{tag}
-                        </a>
-                    ))}
-                </div>
-            </div>
-        )}
-
-        <div class="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {page.data.map((post) => (
-                <article class="bg-bg-card p-6 rounded-lg shadow-sm border border-border-subtle hover:border-accent hover:shadow-md transition duration-300 flex flex-col h-full">
-                    
-                    <div class="flex justify-between items-center mb-3">
-                        <div class="flex items-center gap-2 text-xs text-text-muted font-medium">
-                            <span>{post.frontmatter.date}</span>
-                            <span>•</span>
-                            <span class="text-accent font-bold bg-accent-bg px-2 py-0.5 rounded-full">
-                                {Math.ceil(post.frontmatter.minutesRead || 1)} {t('blog.readTime')}
-                            </span>
-                        </div>
-                    </div>
-
-                    <h2 class="text-xl md:text-2xl font-bold mb-3 text-text-primary leading-tight">
-                        <a href={post.url} class="hover:text-accent transition-colors">
-                            {post.frontmatter.title}
-                        </a>
-                    </h2>
-                    
-                    <p class="text-text-secondary mb-6 line-clamp-3 flex-grow text-sm md:text-base">
-                        {post.frontmatter.description}
+        {
+            /* Etiquetas populares: renderizado condicional si hay tags, enlaces a páginas de tag en español */
+        }
+        {
+            uniqueTags.length > 0 && (
+                <div class="mb-12 border-b border-border-subtle pb-8">
+                    <p class="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">
+                        {t("home.popular")}
                     </p>
+                    <div class="flex flex-wrap gap-3">
+                        {uniqueTags.map((tag) => (
+                            <a
+                                href={`/etiquetas/${tag}`}
+                                class="bg-bg-card border border-border-subtle text-text-secondary px-4 py-2 rounded-full text-sm font-medium hover:border-accent hover:text-accent hover:shadow-sm transition"
+                            >
+                                #{tag}
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )
+        }
 
-                    <a href={post.url} class="text-sm font-bold text-text-primary hover:text-accent flex items-center gap-1 group mt-auto">
-                        {t('blog.readMore')} 
-                        <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
-                    </a>
-                </article>
-            ))}
+        {
+            /* Grid de artículos: tarjetas con metadata, título, descripción y enlace "Leer más" */
+        }
+        <div
+            class="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+        >
+            {
+                page.data.map((post) => (
+                    <article class="bg-bg-card p-6 rounded-lg shadow-sm border border-border-subtle hover:border-accent hover:shadow-md transition duration-300 flex flex-col h-full">
+                        {/* Metadata del post: fecha y tiempo estimado de lectura */}
+                        <div class="flex justify-between items-center mb-3">
+                            <div class="flex items-center gap-2 text-xs text-text-muted font-medium">
+                                <span>{post.frontmatter.date}</span>
+                                <span>•</span>
+                                <span class="text-accent font-bold bg-accent-bg px-2 py-0.5 rounded-full">
+                                    {Math.ceil(
+                                        post.frontmatter.minutesRead || 1,
+                                    )}{" "}
+                                    {t("blog.readTime")}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Título del post con enlace a la página individual */}
+                        <h2 class="text-xl md:text-2xl font-bold mb-3 text-text-primary leading-tight">
+                            <a
+                                href={post.url}
+                                class="hover:text-accent transition-colors"
+                            >
+                                {post.frontmatter.title}
+                            </a>
+                        </h2>
+
+                        {/* Descripción truncada a 3 líneas */}
+                        <p class="text-text-secondary mb-6 line-clamp-3 flex-grow text-sm md:text-base">
+                            {post.frontmatter.description}
+                        </p>
+
+                        {/* Enlace "Leer más" con icono de flecha animado */}
+                        <a
+                            href={post.url}
+                            class="text-sm font-bold text-text-primary hover:text-accent flex items-center gap-1 group mt-auto"
+                        >
+                            {t("blog.readMore")}
+                            <span class="group-hover:translate-x-1 transition-transform">
+                                &rarr;
+                            </span>
+                        </a>
+                    </article>
+                ))
+            }
         </div>
 
-        {/* Pagination Controls */}
-        {/* Pagination Controls */}
+        {
+            /* Controles de paginación: botón anterior, números de página con estado activo, botón siguiente */
+        }
         <div class="flex justify-center items-center gap-2 mt-12">
-            {/* Previous Page */}
-            <a 
-                href={page.url.prev || '#'} 
-                class={`w-10 h-10 flex items-center justify-center rounded-full border border-border-subtle transition-colors ${!page.url.prev ? 'text-text-muted cursor-not-allowed opacity-50' : 'bg-bg-card hover:border-accent hover:text-accent'}`}
+            {/* Botón página anterior: deshabilitado si no hay página previa */}
+            <a
+                href={page.url.prev || "#"}
+                class={`w-10 h-10 flex items-center justify-center rounded-full border border-border-subtle transition-colors ${!page.url.prev ? "text-text-muted cursor-not-allowed opacity-50" : "bg-bg-card hover:border-accent hover:text-accent"}`}
                 aria-disabled={!page.url.prev}
                 aria-label="Página anterior"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                <span class="icon-[solar--alt-arrow-left-outline] w-5 h-5"></span>
             </a>
 
-            {/* Page Numbers */}
+            {
+                /* Números de página: enlace a página 1 como raíz '/', resto como '/[num]' */
+            }
             <div class="flex items-center gap-1">
-                {Array.from({ length: page.lastPage }, (_, i) => i + 1).map((num) => {
-                    const isCurrent = num === page.currentPage;
-                    const href = num === 1 ? '/' : `/${num}`;
-                    return (
-                        <a 
-                            href={href}
-                            class={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-bold transition-all ${
-                                isCurrent 
-                                ? 'bg-accent text-white shadow-md scale-105' 
-                                : 'bg-transparent text-text-muted hover:bg-bg-subtle hover:text-text-primary'
-                            }`}
-                        >
-                            {num}
-                        </a>
-                    );
-                })}
+                {
+                    Array.from({ length: page.lastPage }, (_, i) => i + 1).map(
+                        (num) => {
+                            const isCurrent = num === page.currentPage;
+                            const href = num === 1 ? "/" : `/${num}`;
+                            return (
+                                <a
+                                    href={href}
+                                    class={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-bold transition-all ${
+                                        isCurrent
+                                            ? "bg-accent text-white shadow-md scale-105"
+                                            : "bg-transparent text-text-muted hover:bg-bg-subtle hover:text-text-primary"
+                                    }`}
+                                >
+                                    {num}
+                                </a>
+                            );
+                        },
+                    )
+                }
             </div>
 
-            {/* Next Page */}
-            <a 
-                href={page.url.next || '#'} 
-                class={`w-10 h-10 flex items-center justify-center rounded-full border border-border-subtle transition-colors ${!page.url.next ? 'text-text-muted cursor-not-allowed opacity-50' : 'bg-bg-card hover:border-accent hover:text-accent'}`}
+            {
+                /* Botón página siguiente: deshabilitado si no hay página siguiente */
+            }
+            <a
+                href={page.url.next || "#"}
+                class={`w-10 h-10 flex items-center justify-center rounded-full border border-border-subtle transition-colors ${!page.url.next ? "text-text-muted cursor-not-allowed opacity-50" : "bg-bg-card hover:border-accent hover:text-accent"}`}
                 aria-disabled={!page.url.next}
                 aria-label="Siguiente página"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                <span class="icon-[solar--alt-arrow-right-outline] w-5 h-5"></span>
             </a>
         </div>
     </section>

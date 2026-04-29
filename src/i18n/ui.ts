@@ -1,10 +1,13 @@
+// Idiomas soportados por la aplicacion
 export const languages = {
 	es: "Español",
 	en: "English",
 };
 
+// Idioma base del sitio
 export const defaultLang = "es";
 
+// Diccionario de textos traducidos
 export const ui = {
 	es: {
 		"nav.home": "Inicio",
@@ -97,6 +100,10 @@ export const ui = {
 	},
 } as const;
 
+/**
+ * Hook para obtener traducciones segun el idioma seleccionado.
+ * Si una llave no existe en el idioma destino, recurre al idioma por defecto.
+ */
 export function useTranslations(lang: keyof typeof ui) {
 	return function t(key: keyof (typeof ui)[typeof defaultLang]) {
 		return ui[lang][key] || ui[defaultLang][key];
