@@ -1,4 +1,4 @@
-﻿---
+---
 /**
  * @property {string} slug - Identificador del post (llave en la DB)
  * @property {'es' | 'en'} [lang] - Idioma para internacionalizacion
@@ -37,48 +37,66 @@ const clientStrings = {
 ---
 
 {/* Script de Cloudflare Turnstile */}
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer
+></script>
 
 {/* Seccion principal */}
 <div class="mt-16 pt-8 border-t border-border-subtle" id="comments-section">
-    <h3 class="text-2xl font-bold mb-6 text-text-primary">{t('comments.title')}</h3>
+    <h3 class="text-2xl font-bold mb-6 text-text-primary">
+        {t("comments.title")}
+    </h3>
 
     {/* Lista de comentarios: se llena via JS */}
     <div id="comments-list" class="space-y-6 mb-10">
-        <p class="text-text-muted italic" id="loading-msg">{t('comments.loading')}</p>
+        <p class="text-text-muted italic" id="loading-msg">
+            {t("comments.loading")}
+        </p>
     </div>
 
     {/* Formulario para agregar comentarios */}
-    <div class="bg-gradient-to-br from-bg-card to-bg-subtle p-8 rounded-2xl border border-border-subtle shadow-lg">
-        <h4 class="text-xl font-bold mb-6 text-text-primary flex items-center gap-2">
-            <span class="icon-[solar--chat-line-outline] text-accent w-5 h-5"></span>
-            {t('comments.leave')}
+    <div
+        class="bg-gradient-to-br from-bg-card to-bg-subtle p-8 rounded-2xl border border-border-subtle shadow-lg"
+    >
+        <h4
+            class="text-xl font-bold mb-6 text-text-primary flex items-center gap-2"
+        >
+            <span class="icon-[solar--chat-line-outline] text-accent w-5 h-5"
+            ></span>
+            {t("comments.leave")}
         </h4>
         <form id="comment-form" class="space-y-6">
             <div class="space-y-2">
-                <label for="author" class="text-sm font-bold text-text-muted uppercase tracking-wider ml-1">{t('comments.name')}</label>
+                <label
+                    for="author"
+                    class="text-sm font-bold text-text-muted uppercase tracking-wider ml-1"
+                    >{t("comments.name")}</label
+                >
                 <div class="relative group">
-                    <input 
-                        type="text" 
-                        id="author" 
-                        name="author" 
-                        required 
+                    <input
+                        type="text"
+                        id="author"
+                        name="author"
+                        required
                         class="w-full pl-4 pr-4 py-3 rounded-lg bg-bg-canvas border border-border-input text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all shadow-sm group-hover:border-accent/50"
-                        placeholder={t('comments.namePlaceholder')}
+                        placeholder={t("comments.namePlaceholder")}
                     />
                 </div>
             </div>
-            
+
             <div class="space-y-2">
-                <label for="content" class="text-sm font-bold text-text-muted uppercase tracking-wider ml-1">{t('comments.comment')}</label>
+                <label
+                    for="content"
+                    class="text-sm font-bold text-text-muted uppercase tracking-wider ml-1"
+                    >{t("comments.comment")}</label
+                >
                 <div class="relative group">
-                    <textarea 
-                        id="content" 
-                        name="content" 
-                        required 
-                        rows="4" 
+                    <textarea
+                        id="content"
+                        name="content"
+                        required
+                        rows="4"
                         class="w-full pl-4 pr-4 py-3 rounded-lg bg-bg-canvas border border-border-input text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all shadow-sm resize-y min-h-[120px] group-hover:border-accent/50"
-                        placeholder={t('comments.commentPlaceholder')}
+                        placeholder={t("comments.commentPlaceholder")}
                     ></textarea>
                 </div>
             </div>
@@ -88,13 +106,19 @@ const clientStrings = {
 
             <div class="flex items-center justify-between pt-2">
                 {/* Mensaje de estado: role="status" para accesibilidad */}
-                <p id="form-msg" class="text-sm hidden" role="status" aria-live="polite"></p>
-                <button 
-                    type="submit" 
+                <p
+                    id="form-msg"
+                    class="text-sm hidden"
+                    role="status"
+                    aria-live="polite"
+                >
+                </p>
+                <button
+                    type="submit"
                     class="px-8 py-3 bg-accent text-white font-bold rounded-lg shadow-md hover:shadow-xl hover:bg-accent/90 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     id="submit-btn"
                 >
-                    {t('comments.submit')}
+                    {t("comments.submit")}
                 </button>
             </div>
         </form>
@@ -102,10 +126,10 @@ const clientStrings = {
 </div>
 
 <script define:vars={{ slug, clientStrings }}>
-    const commentsList = document.getElementById('comments-list');
-    const form = document.getElementById('comment-form');
-    const msg = document.getElementById('form-msg');
-    const submitBtn = document.getElementById('submit-btn');
+    const commentsList = document.getElementById("comments-list");
+    const form = document.getElementById("comment-form");
+    const msg = document.getElementById("form-msg");
+    const submitBtn = document.getElementById("submit-btn");
 
     const ANIMATION_STAGGER_MS = 100;
     const UNIX_TO_MS = 1000;
@@ -117,11 +141,11 @@ const clientStrings = {
     async function loadComments() {
         try {
             const res = await fetch(`/api/comments/${slug}`);
-            if (!res.ok) throw new Error('Failed to load');
+            if (!res.ok) throw new Error("Failed to load");
             const comments = await res.json();
-            
-            commentsList.innerHTML = '';
-            
+
+            commentsList.innerHTML = "";
+
             if (comments.length === 0) {
                 commentsList.innerHTML = `<p class="text-text-muted">${clientStrings.empty}</p>`;
                 return;
@@ -129,22 +153,27 @@ const clientStrings = {
 
             comments.forEach((comment, index) => {
                 // toLocaleDateString requiere codigos BCP 47 (en-US, es-ES)
-                const date = new Date(comment.created_at * UNIX_TO_MS).toLocaleDateString(clientStrings.locale, {
-                    year: 'numeric', month: 'long', day: 'numeric'
+                const date = new Date(
+                    comment.created_at * UNIX_TO_MS,
+                ).toLocaleDateString(clientStrings.locale, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                 });
 
                 // Iniciales para el avatar (maximo 2 letras)
                 const initials = comment.author
-                    .split(' ')
-                    .map(n => n[0])
-                    .join('')
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
                     .substring(0, 2)
                     .toUpperCase();
 
-                const div = document.createElement('div');
-                div.className = 'bg-bg-card p-5 rounded-lg border border-border-subtle shadow-sm flex gap-4 transition-transform hover:-translate-y-0.5 duration-300 animate-fade-in-up';
+                const div = document.createElement("div");
+                div.className =
+                    "bg-bg-card p-5 rounded-lg border border-border-subtle shadow-sm flex gap-4 transition-transform hover:-translate-y-0.5 duration-300 animate-fade-in-up";
                 div.style.animationDelay = `${index * ANIMATION_STAGGER_MS}ms`;
-                
+
                 div.innerHTML = `
                     <div class="shrink-0 w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-bold text-sm select-none">
                         ${escapeHtml(initials)}
@@ -168,35 +197,35 @@ const clientStrings = {
      * Maneja el envio del formulario.
      * Flujo: Turnstile genera token -> POST al backend -> backend valida con Cloudflare.
      */
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
         submitBtn.disabled = true;
         submitBtn.innerText = clientStrings.submitting;
-        msg.className = 'text-sm mt-2 hidden';
+        msg.className = "text-sm mt-2 hidden";
 
-        const author = document.getElementById('author').value;
-        const content = document.getElementById('content').value;
+        const author = document.getElementById("author").value;
+        const content = document.getElementById("content").value;
         const formData = new FormData(form);
-        const token = formData.get('cf-turnstile-response');
+        const token = formData.get("cf-turnstile-response");
 
         try {
             const res = await fetch(`/api/comments/${slug}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ author, content, token })
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ author, content, token }),
             });
 
             if (res.ok) {
                 form.reset();
                 msg.textContent = clientStrings.success;
-                msg.className = 'text-sm mt-2 text-green-500';
+                msg.className = "text-sm mt-2 text-green-500";
                 loadComments();
             } else {
-                throw new Error('Error posting');
+                throw new Error("Error posting");
             }
         } catch (e) {
             msg.textContent = clientStrings.error;
-            msg.className = 'text-sm mt-2 text-red-500';
+            msg.className = "text-sm mt-2 text-red-500";
         } finally {
             submitBtn.disabled = false;
             submitBtn.innerText = clientStrings.submit;

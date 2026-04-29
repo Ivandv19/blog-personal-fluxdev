@@ -6,7 +6,7 @@ name = "blog-personal-fluxdev"
 
 # Fecha de compatibilidad para las APIs de Cloudflare
 # Define qué versión de las APIs de Workers se usa
-compatibility_date = "2026-02-06"
+compatibility_date = "2026-04-29"
 
 # Directorio donde Astro genera el build estático
 # Cloudflare Pages sirve los archivos desde aquí
