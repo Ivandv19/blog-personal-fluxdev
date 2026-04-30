@@ -5,28 +5,25 @@
 name = "blog-personal-fluxdev"
 
 # Fecha de compatibilidad para las APIs de Cloudflare
-# Define qué versión de las APIs de Workers se usa
-compatibility_date = "2026-04-29"
+compatibility_date = "2026-04-30"
 
 # Directorio donde Astro genera el build estático
-# Cloudflare Pages sirve los archivos desde aquí
 pages_build_output_dir = "./dist"
 
 # Flags de compatibilidad
-# nodejs_compat: Habilita compatibilidad con APIs de Node.js en el Edge
 compatibility_flags = ["nodejs_compat"]
 
+[vars]
+NODE_VERSION = "24.14.1"
+BUN_VERSION = "1.3.13"
+
 # Configuración de base de datos D1 (SQLite en el Edge)
-# Usado para almacenar comentarios del blog
 [[d1_databases]]
 binding = "DB"  # Nombre de la variable en el código
 database_name = "blog-comments"  # Nombre de la base de datos
 database_id = "744a94e3-069c-4f0e-8e2a-40358b2dc74b"  # ID único de la DB en Cloudflare
 
 # Configuración de KV Namespace
-# Usado para rate limiting y cache de comentarios
 [[kv_namespaces]]
 binding = "KV"  # Nombre de la variable en el código
 id = "9b86fe89e24443fb892f1e2b91383d12"  # ID del KV namespace "posts-cache"
-
-
