@@ -35,7 +35,7 @@ const canonicalURL = new URL(
 
 // Valores por defecto para las props
 
-const { title, description, image = "/banner-default.jpg" } = Astro.props;
+const { title, description, image = "/og-main.png" } = Astro.props;
 
 // Fallback de imagen por defecto para redes sociales.
 // Asegurar que /banner-default.jpg exista en public/ y sea 1200x630px.
@@ -70,7 +70,7 @@ if (import.meta.env.DEV) {
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 
 <!-- Favicon: mostrado en pestañas del navegador y bookmarks -->
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" href="/favicon.png" />
 
 <!-- Generador de la pagina -->
 <meta name="generator" content={Astro.generator} />
