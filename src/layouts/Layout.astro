@@ -1,5 +1,8 @@
 ---
-// Layout principal del sitio con Header, Footer e Internacionalizacion
+/**
+ * Layout principal del sitio con estructura base, navegación, footer y gestión de contexto global.
+ */
+
 import "../styles/global.css";
 import BaseHead from "../components/BaseHead.astro";
 import LanguagePicker from "../components/LanguagePicker.astro";
@@ -7,19 +10,21 @@ import Search from "../components/Search.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import { defaultLang, useTranslations } from "../i18n/ui";
 
+// Props con valores por defecto para metadata SEO y configuración de idioma.
 const {
-	title,
-	description = "Un blog sobre desarrollo y tecnología.",
-	image,
-	type = "website",
-	publishDate,
-	lang = defaultLang, // Usar idioma base si no se especifica
+    title,
+    description = "Un blog sobre desarrollo y tecnología.",
+    image,
+    type = "website",
+    publishDate,
+    lang = defaultLang,
 } = Astro.props;
 
+// Determina idioma actual: prioridad props > params > default.
 const currentLang = lang || Astro.params.lang || defaultLang;
 const t = useTranslations(currentLang as any);
 
-// Importacion de la fuente Outfit
+// Importación de fuente Outfit con pesos específicos para optimización de carga.
 import "@fontsource/outfit/300.css";
 import "@fontsource/outfit/400.css";
 import "@fontsource/outfit/500.css";
@@ -29,125 +34,232 @@ import "@fontsource/outfit/700.css";
 <!doctype html>
 <html lang={currentLang}>
     <head>
-        <BaseHead title={title} description={description} image={image} type={type} publishDate={publishDate} />
+        {
+            /* Componente BaseHead: inyecta meta tags SEO, Open Graph, Twitter Cards y JSON-LD */
+        }
+        <BaseHead
+            title={title}
+            description={description}
+            image={image}
+            type={type}
+            publishDate={publishDate}
+        />
+
+        {
+            /* Scripts de inicialización ejecutados antes del render: tema y redirección de idioma */
+        }
         <script is:inline>
-            // Persistencia del tema claro/oscuro
-            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
+            /**
+             * Inicializa preferencia de tema según localStorage o preferencia del sistema.
+             * @sideEffects - Aplica o remueve clase "dark" en document.documentElement
+             */
+            // 1. Verificar preferencia guardada en localStorage
+            // 2. Si no existe, consultar preferencia del sistema (prefers-color-scheme)
+            // 3. Aplicar clase "dark" si corresponde
+            if (
+                localStorage.getItem("color-theme") === "dark" ||
+                (!("color-theme" in localStorage) &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ) {
+                document.documentElement.classList.add("dark");
             } else {
-                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.remove("dark");
             }
 
-            // Redireccion automatica de idioma segun el navegador (solo en la raiz)
-            if (window.location.pathname === '/' && !localStorage.getItem('lang-preference')) {
+            /**
+             * Redirige automáticamente al idioma del navegador si el usuario visita la raíz sin preferencia guardada.
+             * @note Solo ejecuta en pathname '/' para evitar redirecciones en navegación interna
+             */
+            // 1. Verificar que estamos en la ruta raíz y no hay preferencia guardada
+            // 2. Obtener idioma del navegador del usuario
+            // 3. Redirigir a /en/ si el idioma comienza con 'en'
+            if (
+                window.location.pathname === "/" &&
+                !localStorage.getItem("lang-preference")
+            ) {
                 const userLang = navigator.language || navigator.userLanguage;
-                if (userLang.startsWith('en')) {
-                    window.location.href = '/en/';
+                if (userLang.startsWith("en")) {
+                    window.location.href = "/en/";
                 }
             }
         </script>
     </head>
-    <body class="bg-bg-canvas text-text-primary font-light antialiased flex flex-col min-h-screen transition-colors duration-300">
-        
-        <header class="border-b border-border-subtle bg-bg-canvas/90 sticky top-0 backdrop-blur-sm z-40 transition-colors duration-300">
-            <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-4">
-                <a href={`/${currentLang === 'es' ? '' : currentLang}`} class="font-bold text-xl tracking-tight hover:text-accent transition-colors shrink-0">
+
+    <body
+        class="bg-bg-canvas text-text-primary font-light antialiased flex flex-col min-h-screen transition-colors duration-300"
+    >
+        {
+            /* 
+          HEADER: Barra de navegación principal
+        */
+        }
+        <header
+            class="border-b border-border-subtle bg-bg-canvas/90 sticky top-0 backdrop-blur-sm z-40 transition-colors duration-300"
+        >
+            <nav
+                class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-4"
+            >
+                {
+                    /* Logo: enlace al home del idioma actual (raíz para es, /en para en) */
+                }
+                <a
+                    href={`/${currentLang === "es" ? "" : currentLang}`}
+                    class="font-bold text-xl tracking-tight hover:text-accent transition-colors shrink-0"
+                >
                     Flux
                 </a>
-                
-                <!-- Buscador central -->
+
+                {
+                    /* Buscador central: contenedor con ancho máximo para el componente Search */
+                }
                 <div class="flex-1 relative flex justify-center items-center">
-                     <div class="w-full max-w-md">
+                    <div class="w-full max-w-md">
                         <Search />
-                     </div>
+                    </div>
                 </div>
 
+                {
+                    /* Controles de navegación desktop: ocultos en móvil, visibles en sm+ */
+                }
                 <div class="flex items-center gap-2 shrink-0">
-                    <!-- Navegacion de escritorio -->
+                    {
+                        /* Enlaces de navegación principal + controles de idioma y tema (solo desktop) */
+                    }
                     <div class="hidden sm:flex items-center gap-0">
-                        <div class="text-sm font-medium flex items-center gap-4 mr-2">
-                            <a href={`/${currentLang === 'es' ? '' : currentLang}`} class="hover:text-accent transition-colors">{t('nav.home')}</a>
-                            <a href={`/${currentLang === 'es' ? 'about' : 'en/about'}`} class="hover:text-accent transition-colors">{t('nav.about')}</a>
+                        <div
+                            class="text-sm font-medium flex items-center gap-4 mr-2"
+                        >
+                            <a
+                                href={`/${currentLang === "es" ? "" : currentLang}`}
+                                class="hover:text-accent transition-colors"
+                                >{t("nav.home")}</a
+                            >
+                            <a
+                                href={`/${currentLang === "es" ? "about" : "en/about"}`}
+                                class="hover:text-accent transition-colors"
+                                >{t("nav.about")}</a
+                            >
                         </div>
                         <LanguagePicker />
                         <ThemeToggle />
                     </div>
 
-                    <!-- Boton menu movil -->
-                    <button 
-                        id="mobile-menu-button" 
+                    {
+                        /* Botón hamburguesa para abrir menú móvil: visible solo en pantallas pequeñas */
+                    }
+                    <button
+                        id="mobile-menu-button"
                         class="sm:hidden p-2 hover:bg-bg-subtle rounded-md transition-colors"
                         aria-label="Alternar menu"
                     >
-                        <span class="icon-[solar--hamburger-menu-outline] w-6 h-6"></span>
+                        <span
+                            class="icon-[solar--hamburger-menu-outline] w-6 h-6"
+                        ></span>
                     </button>
                 </div>
             </nav>
 
-            <!-- Dropdown del menu movil -->
-            <div 
-                id="mobile-menu" 
+            {
+                /* 
+              DROPDOWN DE MENÚ MÓVIL: 
+              - Oculto por defecto (class="hidden"), se muestra vía JavaScript al hacer clic en hamburguesa
+              - Contiene: enlaces de navegación, selector de idioma con persistencia en localStorage, toggle de tema sincronizado
+              - Se cierra automáticamente al: hacer clic fuera, navegar mediante enlaces internos, o presionar Escape
+            */
+            }
+            <div
+                id="mobile-menu"
                 class="hidden sm:hidden border-t border-border-subtle bg-bg-canvas"
             >
                 <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-3">
-                    <a 
-                        href={`/${currentLang === 'es' ? '' : currentLang}`} 
+                    {
+                        /* Enlaces de navegación para móvil: mismos destinos que desktop, diseño vertical */
+                    }
+                    <a
+                        href={`/${currentLang === "es" ? "" : currentLang}`}
                         class="px-4 py-2 hover:bg-bg-subtle rounded-md transition-colors text-sm font-medium"
                     >
-                        {t('nav.home')}
+                        {t("nav.home")}
                     </a>
-                    <a 
-                        href={`/${currentLang === 'es' ? 'about' : 'en/about'}`} 
+                    <a
+                        href={`/${currentLang === "es" ? "about" : "en/about"}`}
                         class="px-4 py-2 hover:bg-bg-subtle rounded-md transition-colors text-sm font-medium"
                     >
-                        {t('nav.about')}
+                        {t("nav.about")}
                     </a>
-                    
-                    <!-- Separador -->
+
+                    {
+                        /* Separador visual entre navegación y controles de preferencia */
+                    }
                     <div class="border-t border-border-subtle my-2"></div>
-                    
-                    <!-- Selectores de idioma y tema (Versión Móvil) -->
+
+                    {/* Controles de preferencia para móvil: idioma y tema */}
                     <div class="px-4 py-2 flex flex-col gap-3">
-                        <!-- Selector de idioma en linea -->
+                        {
+                            /* Selector de idioma: botones con estado activo y persistencia en localStorage */
+                        }
                         <div class="flex flex-col gap-2">
-                            <span class="text-xs font-bold text-text-muted uppercase tracking-wider">Idioma / Language</span>
+                            <span
+                                class="text-xs font-bold text-text-muted uppercase tracking-wider"
+                                >Idioma / Language</span
+                            >
                             <div class="flex gap-2">
-                                <a 
-                                    href={currentLang === 'es' ? '#' : '/'}
+                                <a
+                                    href={currentLang === "es" ? "#" : "/"}
                                     onclick="localStorage.setItem('lang-preference', 'es')"
                                     class={`flex-1 px-3 py-2 rounded-lg text-sm font-medium text-center transition-all ${
-                                        currentLang === 'es' 
-                                            ? 'bg-accent text-white dark:text-stone-950' 
-                                            : 'bg-bg-subtle text-text-secondary hover:bg-bg-subtle/70'
+                                        currentLang === "es"
+                                            ? "bg-accent text-white dark:text-stone-950"
+                                            : "bg-bg-subtle text-text-secondary hover:bg-bg-subtle/70"
                                     }`}
                                 >
                                     Español
                                 </a>
-                                <a 
-                                    href={currentLang === 'en' ? '#' : '/en'}
+                                <a
+                                    href={currentLang === "en" ? "#" : "/en"}
                                     onclick="localStorage.setItem('lang-preference', 'en')"
                                     class={`flex-1 px-3 py-2 rounded-lg text-sm font-medium text-center transition-all ${
-                                        currentLang === 'en' 
-                                            ? 'bg-accent text-white dark:text-stone-950' 
-                                            : 'bg-bg-subtle text-text-secondary hover:bg-bg-subtle/70'
+                                        currentLang === "en"
+                                            ? "bg-accent text-white dark:text-stone-950"
+                                            : "bg-bg-subtle text-text-secondary hover:bg-bg-subtle/70"
                                     }`}
                                 >
                                     English
                                 </a>
                             </div>
                         </div>
-                        
-                        <!-- Selector de tema movil -->
+
+                        {
+                            /* Toggle de tema para móvil: sincronizado con estado global, iconos dinámicos */
+                        }
                         <div class="flex flex-col gap-2">
-                            <span class="text-xs font-bold text-text-muted uppercase tracking-wider">Tema / Theme</span>
+                            <span
+                                class="text-xs font-bold text-text-muted uppercase tracking-wider"
+                                >Tema / Theme</span
+                            >
                             <button
                                 id="mobile-theme-toggle"
                                 type="button"
                                 class="px-3 py-2 rounded-lg text-sm font-medium bg-bg-subtle hover:bg-bg-subtle/70 transition-all flex items-center justify-center gap-2"
                                 aria-label="Cambiar tema"
                             >
-                                <span id="mobile-theme-icon-dark" class="hidden icon-[solar--moon-stars-outline] w-5 h-5"></span>
-                                <span id="mobile-theme-icon-light" class="hidden icon-[solar--sun-2-outline] w-5 h-5"></span>
+                                {
+                                    /* Icono de luna: visible solo en modo claro (indica cambio a oscuro) */
+                                }
+                                <span
+                                    id="mobile-theme-icon-dark"
+                                    class="hidden icon-[solar--moon-stars-outline] w-5 h-5"
+                                ></span>
+                                {
+                                    /* Icono de sol: visible solo en modo oscuro (indica cambio a claro) */
+                                }
+                                <span
+                                    id="mobile-theme-icon-light"
+                                    class="hidden icon-[solar--sun-2-outline] w-5 h-5"
+                                ></span>
+                                {
+                                    /* Texto descriptivo del estado actual del tema */
+                                }
                                 <span id="mobile-theme-text">Modo Oscuro</span>
                             </button>
                         </div>
@@ -156,164 +268,308 @@ import "@fontsource/outfit/700.css";
             </div>
         </header>
 
+        {
+            /* 
+          LÓGICA DE INTERACCIÓN DEL MENÚ MÓVIL Y TEMA:
+          - Manejo de apertura/cierre del dropdown móvil (click en botón, click fuera, navegación)
+          - Sincronización de UI del toggle de tema móvil con el estado global almacenado en localStorage
+          - Persistencia de preferencias de tema y idioma para sesiones futuras
+        */
+        }
         <script>
-            // Control del menu movil
-            const menuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
+            // Referencias a elementos del menú móvil.
+            const menuButton = document.getElementById("mobile-menu-button");
+            const mobileMenu = document.getElementById("mobile-menu");
 
-            menuButton?.addEventListener('click', () => {
-                mobileMenu?.classList.toggle('hidden');
+            /**
+             * Alterna visibilidad del menú móvil al hacer clic en el botón.
+             */
+            menuButton?.addEventListener("click", () => {
+                mobileMenu?.classList.toggle("hidden");
             });
 
-            // Cerrar el menu al hacer clic fuera del mismo
-            document.addEventListener('click', (e) => {
-                if (!menuButton?.contains(e.target as Node) && !mobileMenu?.contains(e.target as Node)) {
-                    mobileMenu?.classList.add('hidden');
+            /**
+             * Cierra el menú móvil al hacer clic fuera de sus límites.
+             */
+            document.addEventListener("click", (e) => {
+                if (
+                    !menuButton?.contains(e.target as Node) &&
+                    !mobileMenu?.contains(e.target as Node)
+                ) {
+                    mobileMenu?.classList.add("hidden");
                 }
             });
 
-            // Cerrar el menu al navegar a otra pagina
-            mobileMenu?.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu?.classList.add('hidden');
+            /**
+             * Cierra el menú móvil al navegar a otra página mediante sus enlaces internos.
+             */
+            mobileMenu?.querySelectorAll("a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    mobileMenu?.classList.add("hidden");
                 });
             });
 
-            // Control del tema en la version movil
-            const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
-            const mobileDarkIcon = document.getElementById('mobile-theme-icon-dark');
-            const mobileLightIcon = document.getElementById('mobile-theme-icon-light');
-            const mobileThemeText = document.getElementById('mobile-theme-text');
+            // Referencias a elementos del toggle de tema móvil.
+            const mobileThemeToggle = document.getElementById(
+                "mobile-theme-toggle",
+            );
+            const mobileDarkIcon = document.getElementById(
+                "mobile-theme-icon-dark",
+            );
+            const mobileLightIcon = document.getElementById(
+                "mobile-theme-icon-light",
+            );
+            const mobileThemeText =
+                document.getElementById("mobile-theme-text");
 
-            // Sincronizar el estado inicial del toggle movil con el tema actual
+            /**
+             * Sincroniza la UI del toggle móvil con el estado actual del tema.
+             * @sideEffects - Actualiza visibilidad de iconos y texto según modo activo
+             */
             function updateMobileThemeUI() {
-                const isDark = document.documentElement.classList.contains('dark');
+                const isDark =
+                    document.documentElement.classList.contains("dark");
                 if (isDark) {
-                    mobileLightIcon?.classList.remove('hidden');
-                    mobileDarkIcon?.classList.add('hidden');
-                    if (mobileThemeText) mobileThemeText.textContent = 'Modo Claro / Light Mode';
+                    mobileLightIcon?.classList.remove("hidden");
+                    mobileDarkIcon?.classList.add("hidden");
+                    if (mobileThemeText)
+                        mobileThemeText.textContent = "Modo Claro / Light Mode";
                 } else {
-                    mobileDarkIcon?.classList.remove('hidden');
-                    mobileLightIcon?.classList.add('hidden');
-                    if (mobileThemeText) mobileThemeText.textContent = 'Modo Oscuro / Dark Mode';
+                    mobileDarkIcon?.classList.remove("hidden");
+                    mobileLightIcon?.classList.add("hidden");
+                    if (mobileThemeText)
+                        mobileThemeText.textContent = "Modo Oscuro / Dark Mode";
                 }
             }
 
+            // Inicializar UI del tema móvil al cargar.
             updateMobileThemeUI();
 
-            mobileThemeToggle?.addEventListener('click', function () {
-                // Toggle icons and text
-                mobileDarkIcon?.classList.toggle('hidden');
-                mobileLightIcon?.classList.toggle('hidden');
+            /**
+             * Maneja el toggle de tema en móvil: alterna estado y persiste preferencia.
+             */
+            mobileThemeToggle?.addEventListener("click", function () {
+                // 1. Alternar visibilidad de iconos (sol/luna)
+                mobileDarkIcon?.classList.toggle("hidden");
+                mobileLightIcon?.classList.toggle("hidden");
 
-                // Alternar el tema y persistir en localStorage
-                if (localStorage.getItem('color-theme')) {
-                    if (localStorage.getItem('color-theme') === 'light') {
-                        document.documentElement.classList.add('dark');
-                        localStorage.setItem('color-theme', 'dark');
+                // 2. Leer preferencia actual y determinar nuevo estado
+                const currentTheme = localStorage.getItem("color-theme");
+
+                // 3. Aplicar cambio de tema y persistir en localStorage
+                if (currentTheme) {
+                    if (currentTheme === "light") {
+                        document.documentElement.classList.add("dark");
+                        localStorage.setItem("color-theme", "dark");
                     } else {
-                        document.documentElement.classList.remove('dark');
-                        localStorage.setItem('color-theme', 'light');
+                        document.documentElement.classList.remove("dark");
+                        localStorage.setItem("color-theme", "light");
                     }
                 } else {
-                    if (document.documentElement.classList.contains('dark')) {
-                        document.documentElement.classList.remove('dark');
-                        localStorage.setItem('color-theme', 'light');
+                    if (document.documentElement.classList.contains("dark")) {
+                        document.documentElement.classList.remove("dark");
+                        localStorage.setItem("color-theme", "light");
                     } else {
-                        document.documentElement.classList.add('dark');
-                        localStorage.setItem('color-theme', 'dark');
+                        document.documentElement.classList.add("dark");
+                        localStorage.setItem("color-theme", "dark");
                     }
                 }
 
+                // 4. Sincronizar UI con nuevo estado
                 updateMobileThemeUI();
             });
         </script>
 
-        <main class="w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex-grow animate-fade-in-up">
-            <slot /> 
+        {
+            /* 
+          MAIN: Contenedor del contenido principal de cada página.
+          - Slot: inyecta el contenido renderizado de la página activa (.md, .astro, etc.)
+          - Estilos: ancho máximo centrado, padding responsivo, animación de entrada
+          - Flex-grow: empuja el footer hacia abajo en páginas con poco contenido
+        */
+        }
+        <main
+            class="w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex-grow animate-fade-in-up"
+        >
+            <slot />
         </main>
 
-        <footer class="border-t border-border-subtle mt-auto pt-16 pb-8 transition-colors duration-300">
+        {
+            /* 
+          FOOTER: Pie de página con cuatro columnas en desktop (una en móvil):
+        */
+        }
+        <footer
+            class="border-t border-border-subtle mt-auto pt-16 pb-8 transition-colors duration-300"
+        >
             <div class="max-w-6xl mx-auto px-4 sm:px-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-                    <!-- Identidad y descripcion -->
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
+                >
+                    {/* Columna 1: Identidad del sitio y enlaces sociales */}
                     <div class="flex flex-col gap-4">
-                        <a href={`/${currentLang === 'es' ? '' : currentLang}`} class="font-bold text-2xl tracking-tight hover:text-accent transition-colors">
+                        <a
+                            href={`/${currentLang === "es" ? "" : currentLang}`}
+                            class="font-bold text-2xl tracking-tight hover:text-accent transition-colors"
+                        >
                             Flux
                         </a>
-                        <p class="text-text-secondary text-sm leading-relaxed max-w-xs">
-                            {t('footer.description')}
+                        <p
+                            class="text-text-secondary text-sm leading-relaxed max-w-xs"
+                        >
+                            {t("footer.description")}
                         </p>
                         <div class="flex gap-4 mt-2">
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-all hover:scale-110 flex items-center" aria-label="Instagram">
-                                <span class="icon-[ri--instagram-line] w-5 h-5"></span>
+                            <a
+                                href="https://instagram.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="text-text-muted hover:text-accent transition-all hover:scale-110 flex items-center"
+                                aria-label="Instagram"
+                            >
+                                <span class="icon-[ri--instagram-line] w-5 h-5"
+                                ></span>
                             </a>
-                            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-all hover:scale-110 flex items-center" aria-label="YouTube">
-                                <span class="icon-[ri--youtube-fill] w-5 h-5"></span>
+                            <a
+                                href="https://youtube.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="text-text-muted hover:text-accent transition-all hover:scale-110 flex items-center"
+                                aria-label="YouTube"
+                            >
+                                <span class="icon-[ri--youtube-fill] w-5 h-5"
+                                ></span>
                             </a>
-                            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-all hover:scale-110 flex items-center" aria-label="GitHub">
-                                <span class="icon-[ri--github-fill] w-5 h-5"></span>
+                            <a
+                                href="https://github.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="text-text-muted hover:text-accent transition-all hover:scale-110 flex items-center"
+                                aria-label="GitHub"
+                            >
+                                <span class="icon-[ri--github-fill] w-5 h-5"
+                                ></span>
                             </a>
                         </div>
                     </div>
-                    </div>
 
-                    <!-- Navegacion del pie de pagina -->
+                    {/* Columna 2: Navegación secundaria */}
                     <div class="flex flex-col gap-4">
-                        <h3 class="font-bold text-text-primary uppercase tracking-wider text-sm">{t('footer.nav')}</h3>
+                        <h3
+                            class="font-bold text-text-primary uppercase tracking-wider text-sm"
+                        >
+                            {t("footer.nav")}
+                        </h3>
                         <ul class="flex flex-col gap-3 text-sm text-text-muted">
-                            <li><a href={`/${currentLang === 'es' ? '' : currentLang}`} class="hover:text-accent transition-colors">{t('nav.home')}</a></li>
-                            <li><a href={`/${currentLang === 'es' ? 'about' : 'en/about'}`} class="hover:text-accent transition-colors">{t('nav.about')}</a></li>
+                            <li>
+                                <a
+                                    href={`/${currentLang === "es" ? "" : currentLang}`}
+                                    class="hover:text-accent transition-colors"
+                                    >{t("nav.home")}</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href={`/${currentLang === "es" ? "about" : "en/about"}`}
+                                    class="hover:text-accent transition-colors"
+                                    >{t("nav.about")}</a
+                                >
+                            </li>
                         </ul>
                     </div>
 
-                    <!-- Enlaces legales -->
+                    {
+                        /* Columna 3: Enlaces legales con rutas dinámicas por idioma */
+                    }
                     <div class="flex flex-col gap-4">
-                        <h3 class="font-bold text-text-primary uppercase tracking-wider text-sm">{t('footer.legal')}</h3>
+                        <h3
+                            class="font-bold text-text-primary uppercase tracking-wider text-sm"
+                        >
+                            {t("footer.legal")}
+                        </h3>
                         <ul class="flex flex-col gap-3 text-sm text-text-muted">
-                            <li><a href={`/${currentLang === 'es' ? 'legal/terms' : 'en/legal/terms'}`} class="hover:text-accent transition-colors">{t('footer.terms')}</a></li>
-                            <li><a href={`/${currentLang === 'es' ? 'legal/privacy' : 'en/legal/privacy'}`} class="hover:text-accent transition-colors">{t('footer.privacy')}</a></li>
+                            <li>
+                                <a
+                                    href={`/${currentLang === "es" ? "legal/terms" : "en/legal/terms"}`}
+                                    class="hover:text-accent transition-colors"
+                                    >{t("footer.terms")}</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href={`/${currentLang === "es" ? "legal/privacy" : "en/legal/privacy"}`}
+                                    class="hover:text-accent transition-colors"
+                                    >{t("footer.privacy")}</a
+                                >
+                            </li>
                         </ul>
                     </div>
 
-                    <!-- Formulario de suscripcion -->
+                    {
+                        /* Columna 4: Formulario de suscripción con prevención de submit nativo */
+                    }
                     <div class="flex flex-col gap-4">
-                        <h3 class="font-bold text-text-primary uppercase tracking-wider text-sm">{t('footer.subscribe')}</h3>
-                        <form class="flex flex-col gap-3" onsubmit="event.preventDefault();">
-                            <input 
-                                type="email" 
-                                placeholder={t('footer.subscribePlaceholder')} 
+                        <h3
+                            class="font-bold text-text-primary uppercase tracking-wider text-sm"
+                        >
+                            {t("footer.subscribe")}
+                        </h3>
+                        <form
+                            class="flex flex-col gap-3"
+                            onsubmit="event.preventDefault();"
+                        >
+                            <input
+                                type="email"
+                                placeholder={t("footer.subscribePlaceholder")}
                                 class="px-4 py-2 rounded-md border border-border-subtle bg-bg-canvas text-text-primary text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                             />
-                            <button type="submit" class="px-4 py-2 rounded-md bg-accent text-white dark:text-stone-950 font-medium text-sm hover:bg-accent-hover transition-colors shadow-sm">
-                                {t('footer.subscribeButton')}
+                            <button
+                                type="submit"
+                                class="px-4 py-2 rounded-md bg-accent text-white dark:text-stone-950 font-medium text-sm hover:bg-accent-hover transition-colors shadow-sm"
+                            >
+                                {t("footer.subscribeButton")}
                             </button>
                         </form>
                     </div>
                 </div>
 
-                <div class="border-t border-border-subtle pt-8 flex flex-col items-center gap-6">
-                    <!-- Tecnologias utilizadas -->
+                {
+                    /* Barra inferior: créditos, tecnologías y derechos de autor */
+                }
+                <div
+                    class="border-t border-border-subtle pt-8 flex flex-col items-center gap-6"
+                >
                     <div class="flex flex-col items-center gap-4">
                         <p class="text-sm font-medium text-text-secondary">
-                            {t('footer.developedBy')} <span class="font-bold text-text-primary">Sinx</span>
+                            {t("footer.developedBy")}
+                            <span class="font-bold text-text-primary">Sinx</span
+                            >
                         </p>
                         <div class="flex flex-wrap justify-center gap-2">
-                            {["Astro", "Vite", "Tailwind", "Cloudflare"].map((tech) => (
-                                <span class="px-3 py-1 text-xs font-medium rounded-full border border-border-subtle bg-bg-subtle text-stone-900 dark:text-stone-200 transition-all hover:border-accent hover:text-accent">
-                                    {tech}
-                                </span>
-                            ))}
+                            {
+                                /* Badges de tecnologías: hover effect para interacción visual */
+                            }
+                            {
+                                ["Astro", "Vite", "Tailwind", "Cloudflare"].map(
+                                    (tech) => (
+                                        <span class="px-3 py-1 text-xs font-medium rounded-full border border-border-subtle bg-bg-subtle text-stone-900 dark:text-stone-200 transition-all hover:border-accent hover:text-accent">
+                                            {tech}
+                                        </span>
+                                    ),
+                                )
+                            }
                         </div>
                     </div>
-
-                    <!-- Derechos de autor -->
+                    {
+                        /* Derechos de autor con año dinámico y textos traducidos */
+                    }
                     <p class="text-xs text-text-muted">
-                        &copy; {new Date().getFullYear()} {t('footer.copyright')} {t('footer.rights')}
+                        &copy; {new Date().getFullYear()}
+                        {t("footer.copyright")}
+                        {t("footer.rights")}
                     </p>
                 </div>
             </div>
         </footer>
-
     </body>
 </html>
