@@ -1,50 +1,94 @@
 ---
-// Componente para botones de compartir en redes sociales
+/**
+ * Componente para botones de compartir en redes sociales.
+ */
+
 const { title, url } = Astro.props;
 
-// Construccion de los enlaces de compartir
+// Construye enlaces de compartir con URL encoding para parámetros seguros.
 const shareLinks = {
-	twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
-	linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
 };
 ---
 
+{/* Contenedor principal de los botones de compartir */}
 <div class="flex items-center gap-4 mt-8 py-4 border-t border-border-subtle">
-    <span class="text-sm font-bold text-text-muted uppercase tracking-wider">Compartir:</span>
+    <span class="text-sm font-bold text-text-muted uppercase tracking-wider"
+        >Compartir:</span
+    >
     <div class="flex gap-3">
-        <!-- Twitter / X -->
-        <a href={shareLinks.twitter} target="_blank" rel="noopener noreferrer" class="group relative size-11 flex items-center justify-center rounded-full bg-bg-card border border-border-subtle text-text-muted transition-all duration-300 hover:bg-black hover:text-white hover:border-black hover:-translate-y-1 hover:shadow-lg dark:hover:bg-white dark:hover:text-black dark:hover:border-white" aria-label="Compartir en Twitter">
+        {/* Botón Twitter/X: abre intento de tweet en nueva ventana */}
+        <a
+            href={shareLinks.twitter}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group relative size-11 flex items-center justify-center rounded-full bg-bg-card border border-border-subtle text-text-muted transition-all duration-300 hover:bg-black hover:text-white hover:border-black hover:-translate-y-1 hover:shadow-lg dark:hover:bg-white dark:hover:text-black dark:hover:border-white"
+            aria-label="Compartir en Twitter"
+        >
             <span class="icon-[ri--twitter-x-fill] w-5 h-5"></span>
-            <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Twitter</span>
-        </a>
-        
-        <!-- LinkedIn -->
-        <a href={shareLinks.linkedin} target="_blank" rel="noopener noreferrer" class="group relative size-11 flex items-center justify-center rounded-full bg-bg-card border border-border-subtle text-text-muted transition-all duration-300 hover:bg-[#0077b5] hover:text-white hover:border-[#0077b5] hover:-translate-y-1 hover:shadow-lg" aria-label="Compartir en LinkedIn">
-            <span class="icon-[ri--linkedin-fill] w-5 h-5"></span>
-            <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">LinkedIn</span>
+            {/* Tooltip: visible al hacer hover sobre el botón */}
+            <span
+                class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap"
+                >Twitter</span
+            >
         </a>
 
-        <!-- Copy Link (Native JS) -->
-        <button id="copy-link-btn" class="group relative size-11 flex items-center justify-center rounded-full bg-bg-card border border-border-subtle text-text-muted transition-all duration-300 hover:bg-accent hover:text-white hover:border-accent hover:-translate-y-1 hover:shadow-lg" aria-label="Copiar enlace">
+        {/* Botón LinkedIn: abre diálogo de compartir en nueva ventana */}
+        <a
+            href={shareLinks.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group relative size-11 flex items-center justify-center rounded-full bg-bg-card border border-border-subtle text-text-muted transition-all duration-300 hover:bg-[#0077b5] hover:text-white hover:border-[#0077b5] hover:-translate-y-1 hover:shadow-lg"
+            aria-label="Compartir en LinkedIn"
+        >
+            <span class="icon-[ri--linkedin-fill] w-5 h-5"></span>
+            {/* Tooltip: visible al hacer hover sobre el botón */}
+            <span
+                class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap"
+                >LinkedIn</span
+            >
+        </a>
+
+        {
+            /* Botón Copiar Enlace: copia URL actual al portapapeles con feedback visual */
+        }
+        <button
+            id="copy-link-btn"
+            class="group relative size-11 flex items-center justify-center rounded-full bg-bg-card border border-border-subtle text-text-muted transition-all duration-300 hover:bg-accent hover:text-white hover:border-accent hover:-translate-y-1 hover:shadow-lg"
+            aria-label="Copiar enlace"
+        >
             <span class="icon-[solar--link-outline] w-5 h-5"></span>
-            <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Copiar</span>
+            {/* Tooltip: visible al hacer hover sobre el botón */}
+            <span
+                class="absolute -top-10 left/2 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap"
+                >Copiar</span
+            >
         </button>
     </div>
-    <span id="copy-feedback" class="text-xs text-accent font-medium opacity-0 transition-opacity">¡Enlace copiado!</span>
+    {/* Mensaje de feedback: visible temporalmente tras copiar exitosamente */}
+    <span
+        id="copy-feedback"
+        class="text-xs text-accent font-medium opacity-0 transition-opacity"
+        >¡Enlace copiado!</span
+    >
 </div>
 
 <script>
-    // Logica para copiar la URL al portapapeles
-    const btn = document.getElementById('copy-link-btn');
-    const feedback = document.getElementById('copy-feedback');
-    
+    // Referencias a elementos del DOM para la funcionalidad de copiar.
+    const btn = document.getElementById("copy-link-btn");
+    const feedback = document.getElementById("copy-feedback");
+
+    // Inicializa el handler de copiar al portapapeles si los elementos existen.
     if (btn && feedback) {
-        btn.addEventListener('click', () => {
-             navigator.clipboard.writeText(window.location.href).then(() => {
-                 // Mostrar feedback visual temporalmente
-                 feedback.classList.remove('opacity-0');
-                 setTimeout(() => feedback.classList.add('opacity-0'), 2000);
-             });
+        btn.addEventListener("click", () => {
+            // 1. Copiar URL actual al portapapeles usando Clipboard API
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                // 2. Mostrar mensaje de feedback visual
+                feedback.classList.remove("opacity-0");
+                // 3. Ocultar mensaje tras 2 segundos
+                setTimeout(() => feedback.classList.add("opacity-0"), 2000);
+            });
         });
     }
 </script>

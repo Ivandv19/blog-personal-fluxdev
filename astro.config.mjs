@@ -8,88 +8,74 @@ import { toString } from "mdast-util-to-string";
 import getReadingTime from "reading-time";
 
 /**
- * Plugin de Remark para calcular el tiempo de lectura
- *
- * Este plugin personalizado se ejecuta durante el procesamiento de archivos Markdown.
- * Calcula automáticamente cuántos minutos toma leer un post basándose en el contenido.
+ * Plugin de Remark para calcular tiempo estimado de lectura de posts.
+ * @returns {Function} Función de transformación de AST de Markdown
  */
 export function remarkReadingTime() {
-	// @ts-ignore - Plugin de Remark con tipos implícitos
-	return (tree, { data }) => {
-		// Extrae todo el texto del árbol de sintaxis abstracta (AST) del Markdown
-		const textOnPage = toString(tree);
+    // @ts-ignore - Plugin de Remark con tipos implícitos
+    return (tree, { data }) => {
+        // 1. Extraer texto plano del árbol de sintaxis abstracta (AST) del Markdown
+        const textOnPage = toString(tree);
 
-		// Calcula el tiempo de lectura usando la librería reading-time
-		const readingTime = getReadingTime(textOnPage);
+        // 2. Calcular tiempo de lectura en minutos usando la librería reading-time
+        const readingTime = getReadingTime(textOnPage);
 
-		// Inyecta el tiempo de lectura en el frontmatter del post
-		// Esto permite acceder a `minutesRead` en cualquier componente Astro
-		data.astro.frontmatter.minutesRead = readingTime.minutes;
-	};
+        // 3. Inyectar resultado en frontmatter para acceso en componentes Astro
+        data.astro.frontmatter.minutesRead = readingTime.minutes;
+    };
 }
 
 /**
- * Configuración Principal de Astro
- *
- * Este archivo define cómo se construye y despliega el blog.
+ * Configuración principal del proyecto Astro.
+ * Define build, i18n, integraciones y procesamiento de Markdown.
  */
 export default defineConfig({
-	/**
-	 * URL base del sitio en producción
-	 * Usado para generar URLs absolutas en el sitemap y RSS
-	 */
-	site: "https://fluxdev.mgdc.site/",
+    /**
+     * URL base del sitio en producción.
+     * Usada para generar URLs absolutas en sitemap, RSS y meta tags.
+     */
+    site: "https://fluxdev.mgdc.site/",
 
-	/**
-	 * Modo de salida: "static" genera HTML estático puro
-	 * Alternativas: "server" (SSR) o "hybrid" (mixto)
-	 *
-	 * Arquitectura de separación de responsabilidades:
-	 * - Astro: Solo genera HTML estático (sin adaptador)
-	 * - Hono Worker: Maneja toda la API (/api/*)
-	 * - Cloudflare Pages: Sirve estáticos + enruta API al Worker
-	 */
-	output: "static",
+    /**
+     * Modo de salida: generación de HTML estático (SSG).
+     * @note La API (/api/*) se maneja por separado en un Hono Worker.
+     */
+    output: "static",
 
-	/**
-	 * Integraciones de Astro
-	 *
-	 * - sitemap: Genera automáticamente sitemap.xml para SEO
-	 */
-	integrations: [sitemap()],
+    /**
+     * Integraciones de Astro habilitadas.
+     * - sitemap: Genera sitemap.xml automático para SEO
+     */
+    integrations: [sitemap()],
 
-	/**
-	 * Configuración de Internacionalización (i18n)
-	 *
-	 * Permite tener contenido en español e inglés con rutas limpias.
-	 * - defaultLocale: Idioma por defecto (español)
-	 * - locales: Idiomas soportados
-	 * - prefixDefaultLocale: false = rutas en español sin /es/ (ej: /blog en vez de /es/blog)
-	 */
-	i18n: {
-		defaultLocale: "es",
-		locales: ["es", "en"],
-		routing: {
-			prefixDefaultLocale: false,
-		},
-	},
+    /**
+     * Configuración de internacionalización (i18n).
+     * - defaultLocale: Idioma por defecto (español)
+     * - locales: Idiomas soportados
+     * - prefixDefaultLocale: false = rutas en español sin prefijo /es/
+     */
+    i18n: {
+        defaultLocale: "es",
+        locales: ["es", "en"],
+        routing: {
+            prefixDefaultLocale: false,
+        },
+    },
 
-	/**
-	 * Configuración de Markdown
-	 *
-	 * remarkPlugins: Plugins que transforman el Markdown antes de renderizarlo
-	 * - remarkReadingTime: Calcula el tiempo de lectura automáticamente
-	 */
-	markdown: {
-		remarkPlugins: [remarkReadingTime],
-	},
+    /**
+     * Configuración de procesamiento de Markdown.
+     * - remarkPlugins: Transformaciones aplicadas antes del renderizado
+     * - remarkReadingTime: Inyecta `minutesRead` en frontmatter de cada post
+     */
+    markdown: {
+        remarkPlugins: [remarkReadingTime],
+    },
 
-	/**
-	 * Configuración de Vite (el bundler que usa Astro)
-	 *
-	 * - tailwindcss: Plugin de Vite para Tailwind CSS v4
-	 */
-	vite: {
-		plugins: [tailwindcss()],
-	},
+    /**
+     * Configuración de Vite (bundler de Astro).
+     * - tailwindcss: Plugin para habilitar Tailwind CSS v4
+     */
+    vite: {
+        plugins: [tailwindcss()],
+    },
 });

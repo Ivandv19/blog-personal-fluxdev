@@ -1,36 +1,41 @@
+/**
+ * Configuración global de estilos con Tailwind CSS v4.
+ * Define tokens semánticos de color, tipografía, animaciones y overrides de typography.
+ */
+
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @plugin "@iconify/tailwind4";
 
-/*
-  Centralized Color Palette (Semantic Tokens)
-  Using Stone/Amber as the base identity.
-*/
+/* Tokens de color semánticos: mapeo de nombres de utilidad a variables CSS */
 @theme {
-  /* Define custom colors that point to our CSS variables */
+  /* Fondos */
   --color-bg-canvas: var(--bg-canvas);
   --color-bg-card: var(--bg-card);
   --color-bg-subtle: var(--bg-subtle);
 
+  /* Textos */
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
 
+  /* Bordes */
   --color-border-subtle: var(--border-subtle);
   --color-border-hover: var(--border-hover);
 
+  /* Acento (Amber) */
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-bg: var(--accent-bg);
   --color-accent-text: var(--accent-text);
 
+  /* Tipografía */
   --font-display: 'Inter', sans-serif;
   --font-outfit: 'Outfit', sans-serif;
 }
 
+/* Esquema de colores claro (default): base Stone/Amber */
 :root {
-  /* LIGHT SCHEME (Default) - Stone / Amber */
-  /* ... color vars unchanged ... */
   --bg-canvas: #fafaf9;
   /* stone-50 */
   --bg-card: #ffffff;
@@ -41,9 +46,9 @@
   --text-primary: #1c1917;
   /* stone-900 */
   --text-secondary: #44403c;
-  /* stone-700 (Was 600 #57534e) - Darker for readability */
+  /* stone-700 */
   --text-muted: #78716c;
-  /* stone-500 (Was 400 #a8a29e) */
+  /* stone-500 */
 
   --border-subtle: #e7e5e4;
   /* stone-200 */
@@ -60,10 +65,8 @@
   /* amber-800 */
 }
 
-/* ... dark mode vars unchanged ... */
-
+/* Esquema de colores oscuro: mismos tokens, valores ajustados para contraste */
 .dark {
-  /* DARK SCHEME - Stone / Amber */
   --bg-canvas: #0c0a09;
   /* stone-950 */
   --bg-card: #1c1917;
@@ -84,16 +87,16 @@
   /* stone-600 */
 
   --accent: #fbbf24;
-  /* amber-400 (Brighter for dark mode) */
+  /* amber-400 (más brillante para dark mode) */
   --accent-hover: #fcd34d;
   /* amber-300 */
   --accent-bg: #451a03;
-  /* amber-950/40 approx - dark amber bg */
+  /* amber-950/40 */
   --accent-text: #fcd34d;
   /* amber-300 */
 }
 
-/* Base Styles using semantic vars */
+/* Estilos base: aplicación de tokens semánticos al body */
 body {
   background-color: var(--bg-canvas);
   color: var(--text-primary);
@@ -101,7 +104,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Preserve System Font for Headings */
+/* Tipografía de encabezados: preservar fuente del sistema para rendimiento y consistencia */
 h1,
 h2,
 h3,
@@ -111,7 +114,7 @@ h6 {
   font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-/* Custom Utilities if needed */
+/* Utilidad personalizada: hover con color de acento */
 .link-hover {
   @apply transition-colors duration-200;
 }
@@ -120,7 +123,7 @@ h6 {
   color: var(--accent);
 }
 
-/* Prose (Typography) Overrides to use our variables */
+/* Overrides de @tailwindcss/typography: mapear variables prose a tokens semánticos */
 .prose {
   --tw-prose-body: var(--text-secondary);
   --tw-prose-headings: var(--text-primary);
@@ -138,7 +141,7 @@ h6 {
   --tw-prose-th-borders: var(--border-subtle);
   --tw-prose-td-borders: var(--border-subtle);
 
-  /* Dark mode mappings rely on the same vars which change in .dark */
+  /* Variantes invert (dark mode): mismos tokens, valores cambian con .dark */
   --tw-prose-invert-body: var(--text-secondary);
   --tw-prose-invert-headings: var(--text-primary);
   --tw-prose-invert-links: var(--accent);
@@ -156,10 +159,7 @@ h6 {
   --tw-prose-invert-td-borders: var(--border-subtle);
 }
 
-/* 
-  Animations 
-  Ported from portfolio
-*/
+/* Animación fadeInUp: entrada con desplazamiento vertical y fade */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -172,13 +172,13 @@ h6 {
   }
 }
 
+/* Utilidad de animación: aplica fadeInUp con estado inicial oculto */
 .animate-fade-in-up {
   opacity: 0;
-  /* Start hidden */
   animation: fadeInUp 0.6s ease-out forwards;
 }
 
-/* Stagger delays */
+/* Utilidades de delay para animaciones escalonadas (stagger) */
 .animate-delay-100 {
   animation-delay: 100ms;
 }
@@ -195,10 +195,7 @@ h6 {
   animation-delay: 500ms;
 }
 
-/* Ensure content is visible if animation fails or JS is disabled (progressive enhancement) 
-   Actually, with strict CSS animation 'forwards', it stays at 'to' state.
-   But if we want to be safe for no-js or prefers-reduced-motion:
-*/
+/* Accesibilidad: desactivar animaciones si el usuario prefiere movimiento reducido */
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in-up {
     opacity: 1;

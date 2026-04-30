@@ -1,4 +1,10 @@
+# Directivas de rastreo para motores de búsqueda.
+# Sintaxis: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+
+# Reglas para todos los user-agents (bots)
 User-agent: *
+# Permitir rastreo de todo el sitio
 Allow: /
 
+# Ubicación del sitemap para indexación eficiente
 Sitemap: https://fluxdev.mgdc.site/sitemap-index.xml

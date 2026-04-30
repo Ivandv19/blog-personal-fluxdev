@@ -1,233 +1,162 @@
 ---
 /**
- * @fileoverview LanguageSelector
- * @description Componente de navegación para cambiar entre idiomas (es/en) con persistencia de preferencia
- * 
- * @features
- * - Detección automática de idioma desde la URL
- * - Redirección inteligente preservando la ruta actual
- * - Persistencia de preferencia en localStorage
- * - Animaciones CSS suaves para el dropdown
- * - Accesibilidad ARIA completa (keyboard nav, screen readers)
- * 
- * @dependencies
- * - astro:i18n (getRelativeLocaleUrl)
- * - ../i18n/ui.ts (languages, getTranslatedPath)
- * - ../utils/posts.ts (getTranslatedPath para posts del blog)
- * 
- * @a11y
- * - aria-expanded en botón para indicar estado del menú
- * - Cierre con tecla Escape + retorno de foco
- * - Cierre al hacer clic fuera (click outside)
- * - @todo: Agregar navegación con flechas dentro del menú
- * 
- * @security
- * - Los valores de languages se validan en tiempo de compilación (TypeScript)
- * - onclick usa template string con valores controlados (no inyección de usuario)
- * 
- * @example
- * ```astro
- * <LanguageSelector />
- * // Renderiza botón con idioma actual + dropdown con opciones es/en
- * ```
+ * Componente de navegación para cambiar entre idiomas (es/en) con persistencia de preferencia.
  */
 
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { languages } from "../i18n/ui";
 import { getTranslatedPath } from "../utils/posts";
 
-// TIPOS Y CONTRATOS DE DATOS EXTERNOS
-
 /**
- * Mapa de códigos de idioma a etiquetas visibles
+ * Mapa de códigos de idioma a etiquetas visibles.
  * @typedef {Object.<string, string>} LanguagesMap
  * @property {string} es - "Español"
  * @property {string} en - "English"
- * @source ../i18n/ui.ts
  */
 
 /**
- * Busca una ruta traducida específica para posts del blog
- * @param {string} currentPath - Ruta actual (ej: "/en/blog/post-1")
- * @param {string} targetLang - Idioma destino: 'es' | 'en'
- * @returns {string | undefined} Ruta traducida si existe en el mapa de posts, undefined si no
- * @source ../utils/posts.ts
+ * Busca una ruta traducida específica para posts del blog.
+ * @param {string} currentPath - Ruta actual.
+ * @param {string} targetLang - Idioma destino: 'es' | 'en'.
+ * @returns {string | undefined} Ruta traducida si existe, undefined si no.
  */
 
-// CONFIGURACIÓN Y DETECCIÓN DE IDIOMA
-
+// Detecta idioma desde la URL: asume estructura "/[lang]/..." o "/" para español por defecto.
+// Nota: Si la estructura de rutas cambia, esta lógica debe actualizarse.
 const currentPath = Astro.url.pathname;
-
-// Detecta idioma desde URL: asume estructura "/[lang]/..." o "/" para español por defecto
-// Nota: Si la estructura de rutas cambia (ej: subdominios), esta lógica debe actualizarse
-// Alternativa más robusta: usar Astro.i18n.locale si está disponible en tu configuración
 const lang = currentPath.split("/")[1] === "en" ? "en" : "es";
 
-// FUNCIÓN PRINCIPAL: CÁLCULO DE RUTA POR IDIOMA
-
 /**
- * Calcula la URL equivalente en otro idioma preservando la ruta y contexto actual
- * 
- * @param {'es' | 'en'} targetLang - Código de idioma destino
- * @returns {string} Ruta absoluta para redirección (ej: "/en/blog/post" o "/blog/post")
- * 
- * @behavior
- * 1. Primero intenta encontrar una traducción específica para posts del blog vía getTranslatedPath()
- * 2. Si no existe traducción específica, aplica reglas genéricas de prefijo de idioma:
- *    - Para 'es': remueve prefijo "/en" si existe, o mantiene ruta base
- *    - Para 'en': agrega prefijo "/en" si no está presente
- * 3. Maneja edge case de ruta raíz "/" correctamente en ambos idiomas
- * 
- * @example
- * // Desde "/blog/mi-post" (español implícito)
- * getLangPath('en') // → "/en/blog/mi-post"
- * 
- * // Desde "/en/blog/my-post" 
- * getLangPath('es') // → "/blog/my-post" (o ruta traducida si existe en mapa de posts)
- * 
- * // Desde "/" (raíz)
- * getLangPath('en') // → "/en"
- * getLangPath('es') // → "/"
- * 
- * @edgeCases
- * - Rutas con múltiples segmentos que contienen "en": el replace puede comportarse inesperadamente
- *   → Solución actual: regex simple, considerar /^\/en(\/|$)/ para mayor precisión si es necesario
- * - targetLang no válido: asume que viene del mapeo de languages (validado en TS)
+ * Calcula la URL equivalente en otro idioma preservando la ruta actual.
+ * @param {'es' | 'en'} targetLang - Código de idioma destino.
+ * @returns {string} Ruta absoluta para redirección.
  */
 function getLangPath(targetLang: string) {
-	const currentPath = Astro.url.pathname;
+    const currentPath = Astro.url.pathname;
 
-	// Intenta encontrar una ruta traducida específica para posts del blog
-	// Útil cuando el slug del post cambia entre idiomas (ej: "/blog/hola" → "/en/blog/hello")
-	const translatedPath = getTranslatedPath(currentPath, targetLang);
-	if (translatedPath) return translatedPath;
+    // 1. Intentar encontrar traducción específica para posts del blog
+    const translatedPath = getTranslatedPath(currentPath, targetLang);
+    if (translatedPath) return translatedPath;
 
-	// Reemplazo genérico para otras páginas estáticas o rutas sin traducción específica
-	if (targetLang === "es") {
-		// Remueve prefijo "/en" si existe; si resulta en string vacío, retorna raíz "/"
-		return currentPath.replace(/^\/en/, "") || "/";
-	} else {
-		// Para inglés: si ya tiene prefijo, mantiene; si no, lo agrega
-		if (currentPath.startsWith("/en")) return currentPath;
-		return `/en${currentPath === "/" ? "" : currentPath}`;
-	}
+    // 2. Aplicar reglas genéricas de prefijo de idioma
+    if (targetLang === "es") {
+        // 2.1. Remover prefijo "/en" si existe, o retornar raíz
+        return currentPath.replace(/^\/en/, "") || "/";
+    } else {
+        // 2.2. Agregar prefijo "/en" si no está presente
+        if (currentPath.startsWith("/en")) return currentPath;
+        return `/en${currentPath === "/" ? "" : currentPath}`;
+    }
 }
 ---
 
-<!-- ───────────────────────────────────────────────────────────
-     SELECTOR DE IDIOMA: MARKUP + ACCESIBILIDAD
-     ─────────────────────────────────────────────────────────── -->
-
+{/* Contenedor principal del selector de idioma */}
 <div class="relative inline-block" id="lang-menu-container">
   
-  <!-- Botón principal: abre/cierra el menú de idiomas -->
-  <!-- ARIA: aria-expanded se actualiza dinámicamente vía JS para screen readers -->
-  <button 
-    id="lang-menu-button"
-    class="flex items-center gap-1 px-2 py-2 hover:text-accent transition-colors text-text-muted group"
-    aria-label="Cambiar idioma"
-    aria-expanded="false"
-    aria-controls="lang-menu-dropdown"
-  >
-    <!-- Ícono decorativo: aria-hidden implícito por ser puramente visual -->
-    <span class="icon-[solar--global-outline] w-[18px] h-[18px] group-hover:text-accent transition-colors"></span>
-    
-    <!-- Label visible del idioma actual -->
-    <span class="text-sm font-medium">{lang === 'es' ? 'ES' : 'EN'}</span>
-    
-    <!-- Ícono de flecha: indica estado expandible -->
-    <span class="icon-[solar--alt-arrow-down-outline] w-[12px] h-[12px] opacity-50 group-hover:opacity-100 transition-opacity"></span>
-  </button>
+    {/* Botón principal: abre/cierra el menú de idiomas */}
+    <button 
+        id="lang-menu-button"
+        class="flex items-center gap-1 px-2 py-2 hover:text-accent transition-colors text-text-muted group"
+        aria-label="Cambiar idioma"
+        aria-expanded="false"
+        aria-controls="lang-menu-dropdown"
+    >
+        {/* Ícono decorativo: aria-hidden implícito por ser puramente visual */}
+        <span class="icon-[solar--global-outline] w-[18px] h-[18px] group-hover:text-accent transition-colors"></span>
+        
+        {/* Label visible del idioma actual */}
+        <span class="text-sm font-medium">{lang === 'es' ? 'ES' : 'EN'}</span>
+        
+        {/* Ícono de flecha: indica estado expandible */}
+        <span class="icon-[solar--alt-arrow-down-outline] w-[12px] h-[12px] opacity-50 group-hover:opacity-100 transition-opacity"></span>
+    </button>
 
-  <div 
-    id="lang-menu-dropdown"
-    role="menu"
-    class="absolute right-0 top-full mt-2 w-32 bg-bg-card/95 backdrop-blur-sm border border-border-subtle rounded-xl shadow-lg p-1 opacity-0 invisible translate-y-2 transition-all duration-200 z-50 transform origin-top-right"
-  >
-    {Object.entries(languages).map(([labelLang, label]) => (
-      <a
-        href={getLangPath(labelLang)}
-        role="menuitem"
-        onclick={`localStorage.setItem('lang-preference', '${labelLang}')`}
-        class={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-          (lang === labelLang || (labelLang === 'es' && !lang && lang !== 'en')) 
-            ? 'bg-accent/10 text-accent' 
-            : 'text-text-secondary hover:bg-bg-subtle hover:text-text-primary'
-        }`}
-      >
-        <span class={`w-1.5 h-1.5 rounded-full bg-accent opacity-0 transition-opacity ${
-          (lang === labelLang || (labelLang === 'es' && !lang && lang !== 'en')) ? 'opacity-100' : ''
-        }`}></span>
-        {label === 'Español' ? 'Español' : 'English'}
-      </a>
-    ))}
-  </div>
+    {/* Dropdown de opciones: estados controlados por CSS + JS */}
+    <div 
+        id="lang-menu-dropdown"
+        role="menu"
+        class="absolute right-0 top-full mt-2 w-32 bg-bg-card/95 backdrop-blur-sm border border-border-subtle rounded-xl shadow-lg p-1 opacity-0 invisible translate-y-2 transition-all duration-200 z-50 transform origin-top-right"
+    >
+        {Object.entries(languages).map(([labelLang, label]) => (
+            <a
+                href={getLangPath(labelLang)}
+                role="menuitem"
+                // Guarda preferencia en localStorage: clave 'lang-preference'
+                onclick={`localStorage.setItem('lang-preference', '${labelLang}')`}
+                class={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    (lang === labelLang || (labelLang === 'es' && !lang && lang !== 'en')) 
+                        ? 'bg-accent/10 text-accent' 
+                        : 'text-text-secondary hover:bg-bg-subtle hover:text-text-primary'
+                }`}
+            >
+                {/* Indicador visual de idioma seleccionado */}
+                <span class={`w-1.5 h-1.5 rounded-full bg-accent opacity-0 transition-opacity ${
+                    (lang === labelLang || (labelLang === 'es' && !lang && lang !== 'en')) ? 'opacity-100' : ''
+                }`}></span>
+                {label === 'Español' ? 'Español' : 'English'}
+            </a>
+        ))}
+    </div>
 </div>
 
-<!-- ───────────────────────────────────────────────────────────
-     LÓGICA DEL CLIENTE: INTERACCIÓN + ACCESIBILIDAD
-     ─────────────────────────────────────────────────────────── -->
 <script is:inline>
-  /**
-   * Patrón de dropdown accesible implementado:
-   * - aria-expanded en el botón indica estado del menú para screen readers
-   * - Cierre con tecla Escape (comportamiento estándar de UI)
-   * - Cierre al hacer clic fuera del componente (click outside)
-   * - Focus management: retorna foco al botón al cerrar con Escape
-   * 
-   * @todo Mejoras futuras de a11y:
-   * - [ ] Navegación con flechas (↑↓) dentro del menú
-   * - [ ] role="menu" y role="menuitem" con keyboard trapping
-   * - [ ] aria-activedescendant para highlight con teclado
-   */
-
-  const btn = document.getElementById('lang-menu-button');
-  const dropdown = document.getElementById('lang-menu-dropdown');
-  
-  // Estado interno del componente (no sincronizado con DOM para performance)
-  let isOpen = false;
-
-  /**
-   * Alterna la visibilidad del menú con animación CSS
-   * @sideEffects
-   * - Actualiza atributo aria-expanded en el botón
-   * - Agrega/remueve clases CSS para animación de entrada/salida
-   */
-  function toggleMenu() {
-    isOpen = !isOpen;
-    btn.setAttribute('aria-expanded', isOpen);
+    // Referencias a elementos del DOM.
+    const btn = document.getElementById('lang-menu-button');
+    const dropdown = document.getElementById('lang-menu-dropdown');
     
-    if (isOpen) {
-      // Entrada: remueve clases de estado "oculto"
-      dropdown.classList.remove('invisible', 'opacity-0', 'translate-y-2');
-    } else {
-      // Salida: aplica clases de estado "oculto"
-      dropdown.classList.add('invisible', 'opacity-0', 'translate-y-2');
+    // Estado interno del componente (no sincronizado con DOM para performance).
+    let isOpen = false;
+
+    /**
+     * Alterna la visibilidad del menú con animación CSS.
+     * @sideEffects
+     * - Actualiza atributo aria-expanded en el botón
+     * - Agrega/remueve clases CSS para animación de entrada/salida
+     */
+    function toggleMenu() {
+        // 1. Invertir estado interno
+        isOpen = !isOpen;
+        
+        // 2. Actualizar atributo ARIA para screen readers
+        btn.setAttribute('aria-expanded', isOpen);
+        
+        // 3. Aplicar o remover clases de animación según estado
+        if (isOpen) {
+            // 3.1. Entrada: remover clases de estado "oculto"
+            dropdown.classList.remove('invisible', 'opacity-0', 'translate-y-2');
+        } else {
+            // 3.2. Salida: aplicar clases de estado "oculto"
+            dropdown.classList.add('invisible', 'opacity-0', 'translate-y-2');
+        }
     }
-  }
 
-  // Click en el botón: toggle del menú + prevención de propagación
-  btn?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu();
-  });
+    // Click en el botón: toggle del menú + prevención de propagación.
+    btn?.addEventListener('click', (e) => {
+        // 1. Prevenir propagación del evento
+        e.stopPropagation();
+        // 2. Ejecutar toggle del menú
+        toggleMenu();
+    });
 
-  // Click fuera del componente: cierra si está abierto
-  // Nota: Usa event bubbling: verifica que el target no sea hijo del botón o dropdown
-  document.addEventListener('click', (e) => {
-    if (isOpen && !btn?.contains(e.target) && !dropdown?.contains(e.target)) {
-      toggleMenu();
-    }
-  });
+    // Click fuera del componente: cierra si está abierto.
+    document.addEventListener('click', (e) => {
+        // 1. Verificar que el click no fue dentro del botón o dropdown
+        if (isOpen && !btn?.contains(e.target) && !dropdown?.contains(e.target)) {
+            // 2. Cerrar menú si está abierto
+            toggleMenu();
+        }
+    });
 
-  // Tecla Escape: cierra menú y retorna foco al botón (patrón accesible)
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && isOpen) {
-      e.preventDefault(); // Previene comportamiento por defecto del navegador
-      toggleMenu();
-      btn?.focus(); // Retorna foco para continuidad de navegación con teclado
-    }
-  });
-
-  // Optimización: no se usa delegation porque son pocos elementos y alta interacción
+    // Tecla Escape: cierra menú y retorna foco al botón.
+    document.addEventListener('keydown', (e) => {
+        // 1. Verificar que se presionó Escape y el menú está abierto
+        if (e.key === 'Escape' && isOpen) {
+            // 2. Prevenir comportamiento por defecto del navegador
+            e.preventDefault();
+            // 3. Cerrar menú
+            toggleMenu();
+            // 4. Retornar foco al botón para navegación con teclado
+            btn?.focus();
+        }
+    });
 </script>

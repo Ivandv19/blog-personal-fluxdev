@@ -1,63 +1,88 @@
 ---
+/**
+ * Página de listado de artículos filtrados por etiqueta (tag).
+ */
+
 import Layout from "../../layouts/Layout.astro";
 
-// 1. Función obligatoria para generar rutas estáticas (SSG)
+/**
+ * Genera rutas estáticas para cada etiqueta única encontrada en los posts del blog.
+ * @returns {Promise<Array>} Array de objetos con params.tag y props.posts filtrados
+ */
 export async function getStaticPaths() {
-	const posts = import.meta.glob("../blog/*.md", { eager: true });
-	const allPosts = Object.values(posts);
+  // 1. Importar todos los archivos .md de la carpeta blog
+  const posts = import.meta.glob("../blog/*.md", { eager: true });
+  const allPosts = Object.values(posts);
 
-	// Sacamos todas las etiquetas únicas (Set elimina duplicados)
-	const uniqueTags = [
-		...new Set(allPosts.flatMap((post) => post.frontmatter.tags)),
-	];
+  // 2. Extraer etiquetas únicas eliminando duplicados con Set
+  const uniqueTags = [
+    ...new Set(allPosts.flatMap((post) => post.frontmatter.tags)),
+  ];
 
-	// Devolvemos una ruta por cada etiqueta encontrada
-	return uniqueTags.map((tag) => {
-		// Filtramos los posts que tengan esa etiqueta
-		const filteredPosts = allPosts.filter((post) =>
-			post.frontmatter.tags?.includes(tag),
-		);
-		return {
-			params: { tag },
-			props: { posts: filteredPosts },
-		};
-	});
+  // 3. Generar una ruta por cada etiqueta con sus posts filtrados
+  return uniqueTags.map((tag) => {
+    // 3.1. Filtrar posts que contengan la etiqueta actual
+    const filteredPosts = allPosts.filter((post) =>
+      post.frontmatter.tags?.includes(tag),
+    );
+    // 3.2. Retornar configuración de ruta con params y props
+    return {
+      params: { tag },
+      props: { posts: filteredPosts },
+    };
+  });
 }
 
-// 2. Aquí recibimos los datos de la URL actual
+// Obtener parámetros de ruta y props inyectados por getStaticPaths.
 const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
 
 <Layout title={`Artículos sobre ${tag}`}>
   <div class="py-10">
-    
+    {
+      /* Cabecera de la página: título de sección y etiqueta actual en formato hashtag */
+    }
     <div class="mb-10 border-b border-border-subtle pb-4">
-      <p class="text-sm text-text-muted uppercase tracking-widest font-bold">Explorando</p>
+      <p class="text-sm text-text-muted uppercase tracking-widest font-bold">
+        Explorando
+      </p>
       <h1 class="text-4xl font-bold text-text-primary capitalize">
         #{tag}
       </h1>
     </div>
 
+    {
+      /* Listado de artículos: tarjetas con título, descripción truncada y enlace al post */
+    }
     <ul class="grid gap-8">
-      {posts.map((post) => (
-        <li class="bg-bg-card p-6 rounded-lg shadow-sm border border-border-subtle hover:border-accent transition duration-300">
+      {
+        posts.map((post) => (
+          <li class="bg-bg-card p-6 rounded-lg shadow-sm border border-border-subtle hover:border-accent transition duration-300">
             <a href={post.url} class="block group">
-                <h2 class="text-2xl font-bold text-text-primary group-hover:text-accent transition">
-                    {post.frontmatter.title}
-                </h2>
-                <p class="text-text-secondary mt-2 line-clamp-2">{post.frontmatter.description}</p>
-                <span class="text-sm font-bold text-accent mt-4 block">Leer artículo &rarr;</span>
+              <h2 class="text-2xl font-bold text-text-primary group-hover:text-accent transition">
+                {post.frontmatter.title}
+              </h2>
+              <p class="text-text-secondary mt-2 line-clamp-2">
+                {post.frontmatter.description}
+              </p>
+              <span class="text-sm font-bold text-accent mt-4 block">
+                Leer artículo &rarr;
+              </span>
             </a>
-        </li>
-      ))}
+          </li>
+        ))
+      }
     </ul>
-    
-    <div class="mt-12">
-        <a href="/" class="text-text-muted hover:text-text-primary underline underline-offset-4">
-            &larr; Volver al inicio
-        </a>
-    </div>
 
+    {/* Enlace de navegación: regresar al listado principal de artículos */}
+    <div class="mt-12">
+      <a
+        href="/"
+        class="text-text-muted hover:text-text-primary underline underline-offset-4"
+      >
+        &larr; Volver al inicio
+      </a>
+    </div>
   </div>
 </Layout>

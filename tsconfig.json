@@ -1,22 +1,15 @@
 {
-	// Configuración de TypeScript para Astro
-	// Extiende la configuración base recomendada por Astro
-	"extends": "astro/tsconfigs/base",
-	"compilerOptions": {
-		// Tipos adicionales para Cloudflare Workers (usado en functions/)
-		"types": [
-			"@cloudflare/workers-types"
-		]
-	},
-	// Archivos a incluir en la compilación
-	// .astro/types.d.ts: Tipos generados automáticamente por Astro
-	// **/*: Todos los archivos del proyecto
-	"include": [
-		".astro/types.d.ts",
-		"**/*"
-	],
-	// Excluir la carpeta de build de la compilación
-	"exclude": [
-		"dist"
-	]
+    "extends": "astro/tsconfigs/base",
+    "compilerOptions": {
+        "types": [
+            "@cloudflare/workers-types"
+        ]
+    },
+    "include": [
+        ".astro/types.d.ts",
+        "**/*"
+    ],
+    "exclude": [
+        "dist"
+    ]
 }

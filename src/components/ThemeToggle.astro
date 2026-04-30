@@ -1,59 +1,90 @@
 ---
-// Componente para alternar entre modo claro y oscuro
+/**
+ * Componente para alternar entre modo claro y oscuro con persistencia de preferencia.
+ */
 ---
+
+{/* Botón de toggle de tema: alterna entre iconos de sol y luna según estado */}
 <button
   id="theme-toggle"
   type="button"
   class="text-text-secondary hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent rounded-lg text-sm p-2 inline-flex items-center transition-colors"
   aria-label="Toggle Dark Mode"
 >
-  <!-- Icono de Luna (Modo Oscuro) -->
-  <span id="theme-toggle-dark-icon" class="hidden icon-[solar--moon-stars-outline] w-5 h-5"></span>
-  <!-- Icono de Sol (Modo Claro) -->
-  <span id="theme-toggle-light-icon" class="hidden icon-[solar--sun-2-outline] w-5 h-5"></span>
+  {
+    /* Icono de luna: visible solo en modo claro (para indicar cambio a oscuro) */
+  }
+  <span
+    id="theme-toggle-dark-icon"
+    class="hidden icon-[solar--moon-stars-outline] w-5 h-5"></span>
+  {
+    /* Icono de sol: visible solo en modo oscuro (para indicar cambio a claro) */
+  }
+  <span
+    id="theme-toggle-light-icon"
+    class="hidden icon-[solar--sun-2-outline] w-5 h-5"></span>
 </button>
 
 <script is:inline>
-  // Logica para manejar el cambio de tema y persistencia
-  const themeToggleBtn = document.getElementById('theme-toggle');
-  const darkIcon = document.getElementById('theme-toggle-dark-icon');
-  const lightIcon = document.getElementById('theme-toggle-light-icon');
+  // Referencias a elementos del DOM para control del toggle de tema.
+  const themeToggleBtn = document.getElementById("theme-toggle");
+  const darkIcon = document.getElementById("theme-toggle-dark-icon");
+  const lightIcon = document.getElementById("theme-toggle-light-icon");
 
-  // Verificacion del estado inicial (localStorage o preferencia del sistema)
+  /**
+   * Inicializa el estado del tema según preferencia guardada o del sistema.
+   * @sideEffects
+   * - Aplica o remueve clase "dark" en document.documentElement
+   * - Muestra el icono correspondiente al estado actual
+   */
+  // 1. Verificar preferencia en localStorage
+  // 2. Si no existe, consultar preferencia del sistema operativo (prefers-color-scheme)
+  // 3. Aplicar clase "dark" y mostrar icono correspondiente
   if (
-    localStorage.getItem('color-theme') === 'dark' ||
-    (!('color-theme' in localStorage) &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches)
+    localStorage.getItem("color-theme") === "dark" ||
+    (!("color-theme" in localStorage) &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches)
   ) {
-    document.documentElement.classList.add('dark');
-    lightIcon.classList.remove('hidden');
+    document.documentElement.classList.add("dark");
+    lightIcon.classList.remove("hidden");
   } else {
-    document.documentElement.classList.remove('dark');
-    darkIcon.classList.remove('hidden');
+    document.documentElement.classList.remove("dark");
+    darkIcon.classList.remove("hidden");
   }
 
-  themeToggleBtn.addEventListener('click', function () {
-    // Alternar visibilidad de los iconos
-    darkIcon.classList.toggle('hidden');
-    lightIcon.classList.toggle('hidden');
+  /**
+   * Maneja el click en el botón para alternar tema y persistir preferencia.
+   * @sideEffects
+   * - Alterna visibilidad de iconos
+   * - Aplica o remueve clase "dark" en document.documentElement
+   * - Guarda preferencia en localStorage
+   */
+  themeToggleBtn?.addEventListener("click", function () {
+    // 1. Alternar visibilidad de iconos (sol/luna)
+    darkIcon.classList.toggle("hidden");
+    lightIcon.classList.toggle("hidden");
 
-    // Actualizar clase en el documento y guardar preferencia
-    if (localStorage.getItem('color-theme')) {
-      if (localStorage.getItem('color-theme') === 'light') {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('color-theme', 'dark');
+    // 2. Leer estado actual de preferencia
+    const currentTheme = localStorage.getItem("color-theme");
+
+    // 3. Aplicar cambio de tema y persistir nueva preferencia
+    if (currentTheme) {
+      // 3.1. Si ya hay preferencia guardada, invertirla
+      if (currentTheme === "light") {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("color-theme", "dark");
       } else {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('color-theme', 'light');
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("color-theme", "light");
       }
     } else {
-      // If not set in localstorage
-      if (document.documentElement.classList.contains('dark')) {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('color-theme', 'light');
+      // 3.2. Si no hay preferencia, usar estado actual del DOM como base
+      if (document.documentElement.classList.contains("dark")) {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("color-theme", "light");
       } else {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('color-theme', 'dark');
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("color-theme", "dark");
       }
     }
   });

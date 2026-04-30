@@ -1,19 +1,31 @@
-<!-- Contenedor para el buscador de Pagefind -->
-<div id="search" class="ml-auto relative"></div> 
+---
+/**
+ * Componente de búsqueda integrado con Pagefind para indexación estática.
+ */
+---
+
+{/* Contenedor donde PagefindUI montará la interfaz de búsqueda */}
+<div id="search" class="ml-auto relative"></div>
 
 <script is:inline>
-    // Inicializacion de Pagefind UI al cargar el DOM
-    window.addEventListener('DOMContentLoaded', (event) => {
-        new PagefindUI({ 
-            element: "#search", 
-            showSubResults: true,
-         
+    /**
+     * Inicializa la interfaz de búsqueda de Pagefind cuando el DOM está listo.
+     * @sideEffects
+     * - Instancia PagefindUI en el elemento #search
+     * - Configura opciones de visualización de resultados
+     */
+    window.addEventListener("DOMContentLoaded", () => {
+        // 1. Esperar a que el DOM esté completamente cargado
+        // 2. Instanciar PagefindUI con configuración personalizada
+        new PagefindUI({
+            element: "#search", // Selector del contenedor donde se montará la UI
+            showSubResults: true, // Mostrar resultados jerárquicos por sección
         });
     });
 </script>
 
 <style is:global>
-    /* Estilos personalizados para la interfaz de Pagefind */
+    /* Variables CSS para personalizar la interfaz de Pagefind */
     .pagefind-ui {
         --pagefind-ui-scale: 0.8;
         --pagefind-ui-primary: #b45309;
@@ -26,38 +38,35 @@
         --pagefind-ui-font: sans-serif;
     }
 
- 
-    /* Ocultar la etiqueta de busqueda por defecto */
+    /* Ocultar etiqueta de búsqueda por defecto: el placeholder del input es suficiente */
     .pagefind-ui .pagefind-ui__search-label {
         display: none;
     }
 
-   
-    /* Estilos del campo de entrada */
+    /* Ajustar padding y peso de fuente del campo de entrada */
     .pagefind-ui .pagefind-ui__search-input {
         font-weight: normal;
         padding-left: 1rem;
     }
 
-
-    /* Estilos del contenedor de resultados (drawer) */
+    /* Estilos del contenedor de resultados (dropdown) */
     .pagefind-ui .pagefind-ui__drawer {
-        position: absolute; 
+        position: absolute;
         left: 0;
-        right: 0;           
-        top: 100%;          
+        right: 0;
+        top: 100%;
         margin-top: 10px;
-        z-index: 100;       
+        z-index: 100;
         background: white;
         border: 1px solid #e7e5e4;
         border-radius: 8px;
-        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); 
-        max-height: 400px;  
-        overflow-y: auto;   
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        max-height: 400px;
+        overflow-y: auto;
         padding: 10px;
     }
 </style>
 
-<!-- Recursos externos de Pagefind -->
-<link href="/pagefind/pagefind-ui.css" rel="stylesheet" is:inline>
+{/* Carga de recursos externos de Pagefind: CSS y JS de la UI */}
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" is:inline />
 <script src="/pagefind/pagefind-ui.js" is:inline></script>
