@@ -114,45 +114,45 @@ import "@fontsource/outfit/700.css";
                     <span>Flux</span>
                 </a>
 
-                {
-                    /* Buscador central: contenedor con ancho máximo para el componente Search */
-                }
-                <div class="flex-1 relative flex justify-center items-center">
-                    <div class="w-full max-w-md">
-                        <Search />
-                    </div>
-                </div>
+				{
+					/* Bloque central: nav links + buscador alineados con el contenido (max-w-3xl) */
+				}
+				<div class="flex-1 flex justify-center">
+					<div class="w-full max-w-3xl flex items-center justify-between">
+						<div class="flex-1 max-w-sm">
+							<Search />
+						</div>
+						{
+							/* Enlaces de navegación desktop */
+						}
+						<div class="hidden sm:flex items-center gap-4 shrink-0">
+							<a
+								href={`/${currentLang === "es" ? "" : currentLang}`}
+								class="hover:text-accent transition-colors text-sm font-medium"
+								>{t("nav.home")}</a
+							>
+							<a
+								href={`/${currentLang === "es" ? "about" : "en/about"}`}
+								class="hover:text-accent transition-colors text-sm font-medium"
+								>{t("nav.about")}</a
+							>
+						</div>
+					</div>
+				</div>
 
-                {
-                    /* Controles de navegación desktop: ocultos en móvil, visibles en sm+ */
-                }
-                <div class="flex items-center gap-2 shrink-0">
-                    {
-                        /* Enlaces de navegación principal + controles de idioma y tema (solo desktop) */
-                    }
-                    <div class="hidden sm:flex items-center gap-0">
-                        <div
-                            class="text-sm font-medium flex items-center gap-4 mr-2"
-                        >
-                            <a
-                                href={`/${currentLang === "es" ? "" : currentLang}`}
-                                class="hover:text-accent transition-colors"
-                                >{t("nav.home")}</a
-                            >
-                            <a
-                                href={`/${currentLang === "es" ? "about" : "en/about"}`}
-                                class="hover:text-accent transition-colors"
-                                >{t("nav.about")}</a
-                            >
-                        </div>
-                        <LanguagePicker />
-                        <ThemeToggle />
-                    </div>
+				{
+					/* Controles desktop: selector de tema e idioma (fuera del contenedor central) */
+				}
+				<div class="flex items-center gap-2 shrink-0">
+					<div class="hidden sm:flex items-center gap-2">
+						<ThemeToggle />
+						<LanguagePicker />
+					</div>
 
-                    {
-                        /* Botón hamburguesa para abrir menú móvil: visible solo en pantallas pequeñas */
-                    }
-                    <button
+					{
+						/* Botón hamburguesa para abrir menú móvil: visible solo en pantallas pequeñas */
+					}
+					<button
                         id="mobile-menu-button"
                         class="sm:hidden p-2 hover:bg-bg-subtle rounded-md transition-colors"
                         aria-label="Alternar menu"
@@ -198,42 +198,8 @@ import "@fontsource/outfit/700.css";
                     }
                     <div class="border-t border-border-subtle my-2"></div>
 
-                    {/* Controles de preferencia para móvil: idioma y tema */}
+                    {/* Controles de preferencia para móvil: tema e idioma */}
                     <div class="px-4 py-2 flex flex-col gap-3">
-                        {
-                            /* Selector de idioma: botones con estado activo y persistencia en localStorage */
-                        }
-                        <div class="flex flex-col gap-2">
-                            <span
-                                class="text-xs font-bold text-text-muted uppercase tracking-wider"
-                                >Idioma / Language</span
-                            >
-                            <div class="flex gap-2">
-                                <a
-                                    href={currentLang === "es" ? "#" : "/"}
-                                    onclick="localStorage.setItem('lang-preference', 'es')"
-                                    class={`flex-1 px-3 py-2 rounded-lg text-sm font-medium text-center transition-all ${
-                                        currentLang === "es"
-                                            ? "bg-accent text-white dark:text-stone-950"
-                                            : "bg-bg-subtle text-text-secondary hover:bg-bg-subtle/70"
-                                    }`}
-                                >
-                                    Español
-                                </a>
-                                <a
-                                    href={currentLang === "en" ? "#" : "/en"}
-                                    onclick="localStorage.setItem('lang-preference', 'en')"
-                                    class={`flex-1 px-3 py-2 rounded-lg text-sm font-medium text-center transition-all ${
-                                        currentLang === "en"
-                                            ? "bg-accent text-white dark:text-stone-950"
-                                            : "bg-bg-subtle text-text-secondary hover:bg-bg-subtle/70"
-                                    }`}
-                                >
-                                    English
-                                </a>
-                            </div>
-                        </div>
-
                         {
                             /* Toggle de tema para móvil: sincronizado con estado global, iconos dinámicos */
                         }
@@ -267,6 +233,40 @@ import "@fontsource/outfit/700.css";
                                 }
                                 <span id="mobile-theme-text">Modo Oscuro</span>
                             </button>
+                        </div>
+
+                        {
+                            /* Selector de idioma: botones con estado activo y persistencia en localStorage */
+                        }
+                        <div class="flex flex-col gap-2">
+                            <span
+                                class="text-xs font-bold text-text-muted uppercase tracking-wider"
+                                >Idioma / Language</span
+                            >
+                            <div class="flex gap-2">
+                                <a
+                                    href={currentLang === "es" ? "#" : "/"}
+                                    onclick="localStorage.setItem('lang-preference', 'es')"
+                                    class={`flex-1 px-3 py-2 rounded-lg text-sm font-medium text-center transition-all ${
+                                        currentLang === "es"
+                                            ? "bg-accent text-white dark:text-stone-950"
+                                            : "bg-bg-subtle text-text-secondary hover:bg-bg-subtle/70"
+                                    }`}
+                                >
+                                    Español
+                                </a>
+                                <a
+                                    href={currentLang === "en" ? "#" : "/en"}
+                                    onclick="localStorage.setItem('lang-preference', 'en')"
+                                    class={`flex-1 px-3 py-2 rounded-lg text-sm font-medium text-center transition-all ${
+                                        currentLang === "en"
+                                            ? "bg-accent text-white dark:text-stone-950"
+                                            : "bg-bg-subtle text-text-secondary hover:bg-bg-subtle/70"
+                                    }`}
+                                >
+                                    English
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -394,7 +394,7 @@ import "@fontsource/outfit/700.css";
         */
         }
         <main
-            class="w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex-grow animate-fade-in-up"
+            class="w-full max-w-3xl mx-auto py-8 sm:py-12 flex-grow animate-fade-in-up"
         >
             <slot />
         </main>

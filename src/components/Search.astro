@@ -28,14 +28,14 @@
     /* Variables CSS para personalizar la interfaz de Pagefind */
     .pagefind-ui {
         --pagefind-ui-scale: 0.8;
-        --pagefind-ui-primary: #b45309;
-        --pagefind-ui-text: #44403c;
-        --pagefind-ui-background: #ffffff;
-        --pagefind-ui-border: #e7e5e4;
-        --pagefind-ui-tag: #f5f5f4;
+        --pagefind-ui-primary: var(--accent);
+        --pagefind-ui-text: var(--text-primary);
+        --pagefind-ui-background: var(--bg-card);
+        --pagefind-ui-border: var(--border-subtle);
+        --pagefind-ui-tag: var(--bg-subtle);
         --pagefind-ui-border-width: 1px;
         --pagefind-ui-border-radius: 8px;
-        --pagefind-ui-font: sans-serif;
+        --pagefind-ui-font: var(--font-outfit);
     }
 
     /* Ocultar etiqueta de búsqueda por defecto: el placeholder del input es suficiente */
@@ -43,10 +43,16 @@
         display: none;
     }
 
-    /* Ajustar padding y peso de fuente del campo de entrada */
+    /* Ajustar altura y padding del campo de entrada */
     .pagefind-ui .pagefind-ui__search-input {
         font-weight: normal;
-        padding-left: 1rem;
+        padding: 0.5rem 0.75rem 0.5rem 1rem;
+        height: 38px;
+    }
+
+    /* Ajustar altura del botón clear */
+    .pagefind-ui .pagefind-ui__search-clear {
+        padding: 0.5rem;
     }
 
     /* Estilos del contenedor de resultados (dropdown) */
@@ -57,13 +63,26 @@
         top: 100%;
         margin-top: 10px;
         z-index: 100;
-        background: white;
-        border: 1px solid #e7e5e4;
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
         border-radius: 8px;
         box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
         max-height: 400px;
         overflow-y: auto;
         padding: 10px;
+    }
+
+    /* Ajustar colores de los resultados según tema */
+    .pagefind-ui .pagefind-ui__result {
+        border-color: var(--border-subtle);
+    }
+
+    .pagefind-ui .pagefind-ui__result-title {
+        color: var(--text-primary);
+    }
+
+    .pagefind-ui .pagefind-ui__result-excerpt {
+        color: var(--text-secondary);
     }
 </style>
 
