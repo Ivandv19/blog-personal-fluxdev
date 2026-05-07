@@ -2,7 +2,7 @@
 # Wrangler es la CLI de Cloudflare para gestionar Workers y Pages
 
 # Nombre del proyecto en Cloudflare
-name = "blog-personal-fluxdev"
+name = "fluxdv"
 
 # Fecha de compatibilidad para las APIs de Cloudflare
 compatibility_date = "2026-04-30"
@@ -13,9 +13,6 @@ pages_build_output_dir = "./dist"
 # Flags de compatibilidad
 compatibility_flags = ["nodejs_compat"]
 
-[vars]
-NODE_VERSION = "24.14.1"
-BUN_VERSION = "1.3.13"
 
 # Configuración de base de datos D1 (SQLite en el Edge)
 [[d1_databases]]

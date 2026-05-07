@@ -34,7 +34,7 @@ export default defineConfig({
 	 * URL base del sitio en producción.
 	 * Usada para generar URLs absolutas en sitemap, RSS y meta tags.
 	 */
-	site: "https://fluxdev.mgdc.site/",
+	site: "https://fluxdev-nebula.mgdc.site/",
 
 	/**
 	 * Modo de salida: generación de HTML estático (SSG).
