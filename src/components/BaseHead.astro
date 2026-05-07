@@ -15,11 +15,11 @@ import UmamiAnalytics from "./UmamiAnalytics.astro";
  * @property {string} [publishDate] - Formato ISO 8601, solo si type="article"
  */
 interface Props {
-  title: string;
-  description: string;
-  image?: string;
-  type?: "website" | "article";
-  publishDate?: string;
+	title: string;
+	description: string;
+	image?: string;
+	type?: "website" | "article";
+	publishDate?: string;
 }
 
 // Resolucion de URLs absolutas para SEO
@@ -29,8 +29,8 @@ interface Props {
  * Requiere definir 'site' en astro.config.mjs.
  */
 const canonicalURL = new URL(
-  Astro.url.pathname,
-  Astro.site || Astro.url.origin,
+	Astro.url.pathname,
+	Astro.site || Astro.url.origin,
 );
 
 // Valores por defecto para las props
@@ -43,23 +43,23 @@ const { title, description, image = "/og-main.png" } = Astro.props;
 // Validaciones en modo desarrollo
 
 if (import.meta.env.DEV) {
-  if (title.length > 60) {
-    console.warn(`[SeoMeta] Titulo muy largo (${title.length} chars).`);
-  }
-  if (description.length > 160) {
-    console.warn(
-      `[SeoMeta] Descripcion muy larga (${description.length} chars).`,
-    );
-  }
+	if (title.length > 60) {
+		console.warn(`[SeoMeta] Titulo muy largo (${title.length} chars).`);
+	}
+	if (description.length > 160) {
+		console.warn(
+			`[SeoMeta] Descripcion muy larga (${description.length} chars).`,
+		);
+	}
 
-  if (Astro.props.type === "article" && Astro.props.publishDate) {
-    const date = new Date(Astro.props.publishDate);
-    if (isNaN(date.getTime())) {
-      console.warn(
-        `[SeoMeta] publishDate invalido: "${Astro.props.publishDate}". Usar ISO 8601.`,
-      );
-    }
-  }
+	if (Astro.props.type === "article" && Astro.props.publishDate) {
+		const date = new Date(Astro.props.publishDate);
+		if (Number.isNaN(date.getTime())) {
+			console.warn(
+				`[SeoMeta] publishDate invalido: "${Astro.props.publishDate}". Usar ISO 8601.`,
+			);
+		}
+	}
 }
 ---
 

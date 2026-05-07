@@ -10,27 +10,27 @@ import Layout from "../../layouts/Layout.astro";
  * @returns {Promise<Array>} Array de objetos con params.tag y props.posts filtrados
  */
 export async function getStaticPaths() {
-  // 1. Importar todos los archivos .md de la carpeta blog
-  const posts = import.meta.glob("../blog/*.md", { eager: true });
-  const allPosts = Object.values(posts);
+	// 1. Importar todos los archivos .md de la carpeta blog
+	const posts = import.meta.glob("../blog/*.md", { eager: true });
+	const allPosts = Object.values(posts);
 
-  // 2. Extraer etiquetas únicas eliminando duplicados con Set
-  const uniqueTags = [
-    ...new Set(allPosts.flatMap((post) => post.frontmatter.tags)),
-  ];
+	// 2. Extraer etiquetas únicas eliminando duplicados con Set
+	const uniqueTags = [
+		...new Set(allPosts.flatMap((post) => post.frontmatter.tags)),
+	];
 
-  // 3. Generar una ruta por cada etiqueta con sus posts filtrados
-  return uniqueTags.map((tag) => {
-    // 3.1. Filtrar posts que contengan la etiqueta actual
-    const filteredPosts = allPosts.filter((post) =>
-      post.frontmatter.tags?.includes(tag),
-    );
-    // 3.2. Retornar configuración de ruta con params y props
-    return {
-      params: { tag },
-      props: { posts: filteredPosts },
-    };
-  });
+	// 3. Generar una ruta por cada etiqueta con sus posts filtrados
+	return uniqueTags.map((tag) => {
+		// 3.1. Filtrar posts que contengan la etiqueta actual
+		const filteredPosts = allPosts.filter((post) =>
+			post.frontmatter.tags?.includes(tag),
+		);
+		// 3.2. Retornar configuración de ruta con params y props
+		return {
+			params: { tag },
+			props: { posts: filteredPosts },
+		};
+	});
 }
 
 // Obtener parámetros de ruta y props inyectados por getStaticPaths.

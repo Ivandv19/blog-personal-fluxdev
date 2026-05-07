@@ -19,20 +19,20 @@ import { useTranslations } from "../i18n/ui";
 const { slug, lang = "es" } = Astro.props;
 
 // Clave publica de Turnstile para el widget de captcha
-const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const _siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 const t = useTranslations(lang);
 
 // Strings pasados al cliente para i18n (evita re-fetch de traducciones)
 // locale usa codigos BCP 47 requeridos por Date.toLocaleDateString
-const clientStrings = {
-    loading: t("comments.loading"),
-    empty: t("comments.empty"),
-    loadError: t("comments.loadError"),
-    submitting: t("comments.submitting"),
-    success: t("comments.success"),
-    error: t("comments.error"),
-    submit: t("comments.submit"),
-    locale: lang === "en" ? "en-US" : "es-ES",
+const _clientStrings = {
+	loading: t("comments.loading"),
+	empty: t("comments.empty"),
+	loadError: t("comments.loadError"),
+	submitting: t("comments.submitting"),
+	success: t("comments.success"),
+	error: t("comments.error"),
+	submit: t("comments.submit"),
+	locale: lang === "en" ? "en-US" : "es-ES",
 };
 ---
 
@@ -102,7 +102,7 @@ const clientStrings = {
             </div>
 
             {/* Widget de Turnstile */}
-            <div class="cf-turnstile" data-sitekey={siteKey}></div>
+            <div class="cf-turnstile" data-sitekey={_siteKey}></div>
 
             <div class="flex items-center justify-between pt-2">
                 {/* Mensaje de estado: role="status" para accesibilidad */}
@@ -125,7 +125,7 @@ const clientStrings = {
     </div>
 </div>
 
-<script define:vars={{ slug, clientStrings }}>
+<script define:vars={{ slug, clientStrings: _clientStrings }}>
     const commentsList = document.getElementById("comments-list");
     const form = document.getElementById("comment-form");
     const msg = document.getElementById("form-msg");

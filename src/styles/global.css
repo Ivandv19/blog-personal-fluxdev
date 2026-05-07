@@ -9,99 +9,101 @@
 
 /* Tokens de color semánticos: mapeo de nombres de utilidad a variables CSS */
 @theme {
-  /* Fondos */
-  --color-bg-canvas: var(--bg-canvas);
-  --color-bg-card: var(--bg-card);
-  --color-bg-subtle: var(--bg-subtle);
+	/* Fondos */
+	--color-bg-canvas: var(--bg-canvas);
+	--color-bg-card: var(--bg-card);
+	--color-bg-subtle: var(--bg-subtle);
 
-  /* Textos */
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
+	/* Textos */
+	--color-text-primary: var(--text-primary);
+	--color-text-secondary: var(--text-secondary);
+	--color-text-muted: var(--text-muted);
 
-  /* Bordes */
-  --color-border-subtle: var(--border-subtle);
-  --color-border-hover: var(--border-hover);
+	/* Bordes */
+	--color-border-subtle: var(--border-subtle);
+	--color-border-hover: var(--border-hover);
 
-  /* Acento (Amber) */
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-  --color-accent-bg: var(--accent-bg);
-  --color-accent-text: var(--accent-text);
+	/* Acento (Amber) */
+	--color-accent: var(--accent);
+	--color-accent-hover: var(--accent-hover);
+	--color-accent-bg: var(--accent-bg);
+	--color-accent-text: var(--accent-text);
 
-  /* Tipografía */
-  --font-display: 'Inter', sans-serif;
-  --font-outfit: 'Outfit', sans-serif;
+	/* Tipografía */
+	--font-display: "Inter", sans-serif;
+	--font-outfit: "Outfit", sans-serif;
 }
 
 /* Esquema de colores claro (default): base Stone/Amber */
 :root {
-  --bg-canvas: #fafaf9;
-  /* stone-50 */
-  --bg-card: #ffffff;
-  /* white */
-  --bg-subtle: #f5f5f4;
-  /* stone-100 */
+	--bg-canvas: #fafaf9;
+	/* stone-50 */
+	--bg-card: #ffffff;
+	/* white */
+	--bg-subtle: #f5f5f4;
+	/* stone-100 */
 
-  --text-primary: #1c1917;
-  /* stone-900 */
-  --text-secondary: #44403c;
-  /* stone-700 */
-  --text-muted: #78716c;
-  /* stone-500 */
+	--text-primary: #1c1917;
+	/* stone-900 */
+	--text-secondary: #44403c;
+	/* stone-700 */
+	--text-muted: #78716c;
+	/* stone-500 */
 
-  --border-subtle: #e7e5e4;
-  /* stone-200 */
-  --border-hover: #d6d3d1;
-  /* stone-300 */
+	--border-subtle: #e7e5e4;
+	/* stone-200 */
+	--border-hover: #d6d3d1;
+	/* stone-300 */
 
-  --accent: #b45309;
-  /* amber-700 */
-  --accent-hover: #d97706;
-  /* amber-600 */
-  --accent-bg: #fffbeb;
-  /* amber-50 */
-  --accent-text: #92400e;
-  /* amber-800 */
+	--accent: #b45309;
+	/* amber-700 */
+	--accent-hover: #d97706;
+	/* amber-600 */
+	--accent-bg: #fffbeb;
+	/* amber-50 */
+	--accent-text: #92400e;
+	/* amber-800 */
 }
 
 /* Esquema de colores oscuro: mismos tokens, valores ajustados para contraste */
 .dark {
-  --bg-canvas: #0c0a09;
-  /* stone-950 */
-  --bg-card: #1c1917;
-  /* stone-900 */
-  --bg-subtle: #292524;
-  /* stone-800 */
+	--bg-canvas: #0c0a09;
+	/* stone-950 */
+	--bg-card: #1c1917;
+	/* stone-900 */
+	--bg-subtle: #292524;
+	/* stone-800 */
 
-  --text-primary: #fafaf9;
-  /* stone-50 */
-  --text-secondary: #d6d3d1;
-  /* stone-300 */
-  --text-muted: #78716c;
-  /* stone-500 */
+	--text-primary: #fafaf9;
+	/* stone-50 */
+	--text-secondary: #d6d3d1;
+	/* stone-300 */
+	--text-muted: #78716c;
+	/* stone-500 */
 
-  --border-subtle: #44403c;
-  /* stone-700 */
-  --border-hover: #57534e;
-  /* stone-600 */
+	--border-subtle: #44403c;
+	/* stone-700 */
+	--border-hover: #57534e;
+	/* stone-600 */
 
-  --accent: #fbbf24;
-  /* amber-400 (más brillante para dark mode) */
-  --accent-hover: #fcd34d;
-  /* amber-300 */
-  --accent-bg: #451a03;
-  /* amber-950/40 */
-  --accent-text: #fcd34d;
-  /* amber-300 */
+	--accent: #fbbf24;
+	/* amber-400 (más brillante para dark mode) */
+	--accent-hover: #fcd34d;
+	/* amber-300 */
+	--accent-bg: #451a03;
+	/* amber-950/40 */
+	--accent-text: #fcd34d;
+	/* amber-300 */
 }
 
 /* Estilos base: aplicación de tokens semánticos al body */
 body {
-  background-color: var(--bg-canvas);
-  color: var(--text-primary);
-  font-family: var(--font-outfit);
-  transition: background-color 0.3s ease, color 0.3s ease;
+	background-color: var(--bg-canvas);
+	color: var(--text-primary);
+	font-family: var(--font-outfit);
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease;
 }
 
 /* Tipografía de encabezados: preservar fuente del sistema para rendimiento y consistencia */
@@ -111,95 +113,97 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	font-family:
+		ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+		"Segoe UI Symbol", "Noto Color Emoji";
 }
 
 /* Utilidad personalizada: hover con color de acento */
 .link-hover {
-  @apply transition-colors duration-200;
+	@apply transition-colors duration-200;
 }
 
 .link-hover:hover {
-  color: var(--accent);
+	color: var(--accent);
 }
 
 /* Overrides de @tailwindcss/typography: mapear variables prose a tokens semánticos */
 .prose {
-  --tw-prose-body: var(--text-secondary);
-  --tw-prose-headings: var(--text-primary);
-  --tw-prose-links: var(--accent);
-  --tw-prose-bold: var(--text-primary);
-  --tw-prose-counters: var(--text-muted);
-  --tw-prose-bullets: var(--text-muted);
-  --tw-prose-hr: var(--border-subtle);
-  --tw-prose-quotes: var(--text-secondary);
-  --tw-prose-quote-borders: var(--border-subtle);
-  --tw-prose-captions: var(--text-muted);
-  --tw-prose-code: var(--text-primary);
-  --tw-prose-pre-code: var(--text-primary);
-  --tw-prose-pre-bg: var(--bg-subtle);
-  --tw-prose-th-borders: var(--border-subtle);
-  --tw-prose-td-borders: var(--border-subtle);
+	--tw-prose-body: var(--text-secondary);
+	--tw-prose-headings: var(--text-primary);
+	--tw-prose-links: var(--accent);
+	--tw-prose-bold: var(--text-primary);
+	--tw-prose-counters: var(--text-muted);
+	--tw-prose-bullets: var(--text-muted);
+	--tw-prose-hr: var(--border-subtle);
+	--tw-prose-quotes: var(--text-secondary);
+	--tw-prose-quote-borders: var(--border-subtle);
+	--tw-prose-captions: var(--text-muted);
+	--tw-prose-code: var(--text-primary);
+	--tw-prose-pre-code: var(--text-primary);
+	--tw-prose-pre-bg: var(--bg-subtle);
+	--tw-prose-th-borders: var(--border-subtle);
+	--tw-prose-td-borders: var(--border-subtle);
 
-  /* Variantes invert (dark mode): mismos tokens, valores cambian con .dark */
-  --tw-prose-invert-body: var(--text-secondary);
-  --tw-prose-invert-headings: var(--text-primary);
-  --tw-prose-invert-links: var(--accent);
-  --tw-prose-invert-bold: var(--text-primary);
-  --tw-prose-invert-counters: var(--text-muted);
-  --tw-prose-invert-bullets: var(--text-muted);
-  --tw-prose-invert-hr: var(--border-subtle);
-  --tw-prose-invert-quotes: var(--text-secondary);
-  --tw-prose-invert-quote-borders: var(--border-subtle);
-  --tw-prose-invert-captions: var(--text-muted);
-  --tw-prose-invert-code: var(--text-primary);
-  --tw-prose-invert-pre-code: var(--text-primary);
-  --tw-prose-invert-pre-bg: var(--bg-subtle);
-  --tw-prose-invert-th-borders: var(--border-subtle);
-  --tw-prose-invert-td-borders: var(--border-subtle);
+	/* Variantes invert (dark mode): mismos tokens, valores cambian con .dark */
+	--tw-prose-invert-body: var(--text-secondary);
+	--tw-prose-invert-headings: var(--text-primary);
+	--tw-prose-invert-links: var(--accent);
+	--tw-prose-invert-bold: var(--text-primary);
+	--tw-prose-invert-counters: var(--text-muted);
+	--tw-prose-invert-bullets: var(--text-muted);
+	--tw-prose-invert-hr: var(--border-subtle);
+	--tw-prose-invert-quotes: var(--text-secondary);
+	--tw-prose-invert-quote-borders: var(--border-subtle);
+	--tw-prose-invert-captions: var(--text-muted);
+	--tw-prose-invert-code: var(--text-primary);
+	--tw-prose-invert-pre-code: var(--text-primary);
+	--tw-prose-invert-pre-bg: var(--bg-subtle);
+	--tw-prose-invert-th-borders: var(--border-subtle);
+	--tw-prose-invert-td-borders: var(--border-subtle);
 }
 
 /* Animación fadeInUp: entrada con desplazamiento vertical y fade */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 /* Utilidad de animación: aplica fadeInUp con estado inicial oculto */
 .animate-fade-in-up {
-  opacity: 0;
-  animation: fadeInUp 0.6s ease-out forwards;
+	opacity: 0;
+	animation: fadeInUp 0.6s ease-out forwards;
 }
 
 /* Utilidades de delay para animaciones escalonadas (stagger) */
 .animate-delay-100 {
-  animation-delay: 100ms;
+	animation-delay: 100ms;
 }
 
 .animate-delay-200 {
-  animation-delay: 200ms;
+	animation-delay: 200ms;
 }
 
 .animate-delay-300 {
-  animation-delay: 300ms;
+	animation-delay: 300ms;
 }
 
 .animate-delay-500 {
-  animation-delay: 500ms;
+	animation-delay: 500ms;
 }
 
 /* Accesibilidad: desactivar animaciones si el usuario prefiere movimiento reducido */
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in-up {
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
+	.animate-fade-in-up {
+		opacity: 1;
+		transform: none;
+		animation: none;
+	}
 }

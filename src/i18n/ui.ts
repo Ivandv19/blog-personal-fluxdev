@@ -1,6 +1,6 @@
 /**
  * Módulo de internacionalización (i18n) para gestión de textos traducidos.
- * 
+ *
  * @description Define idiomas soportados, diccionario de traducciones y hook para acceso seguro.
  * @pattern Fallback: si una clave no existe en el idioma destino, se usa el valor del idioma por defecto.
  */
@@ -16,12 +16,12 @@ export const defaultLang = "es";
 
 /**
  * Diccionario de textos traducidos organizados por idioma y clave.
- * 
+ *
  * @structure
  * - Claves en formato dot-case: "seccion.elemento" (ej: "nav.home", "comments.submit")
  * - Valores: strings localizados para cada idioma soportado
  * - Tipado con `as const` para inferencia estricta de claves en TypeScript
- * 
+ *
  * @maintenance
  * - Agregar nuevas claves en ambos idiomas para evitar fallbacks inesperados
  * - Usar prefijos consistentes: nav.*, blog.*, footer.*, comments.*, etc.
@@ -121,22 +121,22 @@ export const ui = {
 
 /**
  * Hook para obtener función de traducción según el idioma seleccionado.
- * 
+ *
  * @param {keyof typeof ui} lang - Código de idioma soportado ('es' | 'en')
  * @returns {(key: keyof (typeof ui)[typeof defaultLang]) => string} Función t(key) que retorna texto localizado
- * 
+ *
  * @behavior
  * - Si la clave existe en el idioma destino: retorna ese valor
  * - Si la clave no existe en el idioma destino: retorna valor del idioma por defecto (fallback)
  * - Si la clave no existe en ningún idioma: retorna undefined (manejar en componente)
- * 
+ *
  * @example
  * ```ts
  * const t = useTranslations('en');
  * t('nav.home'); // → "Home"
  * t('clave.inexistente'); // → undefined (fallback no aplica)
  * ```
- * 
+ *
  * @note El tipado con `as const` en `ui` permite autocompletado y validación de claves en tiempo de compilación.
  */
 export function useTranslations(lang: keyof typeof ui) {

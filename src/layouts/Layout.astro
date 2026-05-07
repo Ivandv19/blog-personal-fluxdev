@@ -12,17 +12,17 @@ import { defaultLang, useTranslations } from "../i18n/ui";
 
 // Props con valores por defecto para metadata SEO y configuración de idioma.
 const {
-    title,
-    description = "Un blog sobre desarrollo y tecnología.",
-    image,
-    type = "website",
-    publishDate,
-    lang = defaultLang,
+	title,
+	description = "Un blog sobre desarrollo y tecnología.",
+	image,
+	type = "website",
+	publishDate,
+	lang = defaultLang,
 } = Astro.props;
 
 // Determina idioma actual: prioridad props > params > default.
 const currentLang = lang || Astro.params.lang || defaultLang;
-const t = useTranslations(currentLang as any);
+const t = useTranslations(currentLang as "es" | "en");
 
 // Importación de fuente Outfit con pesos específicos para optimización de carga.
 import "@fontsource/outfit/300.css";

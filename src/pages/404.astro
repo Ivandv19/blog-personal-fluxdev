@@ -1,9 +1,5 @@
 ---
-import { defaultLang, useTranslations } from "../i18n/ui";
 import Layout from "../layouts/Layout.astro";
-
-const lang = Astro.params.lang || defaultLang;
-const t = useTranslations(lang as any);
 ---
 
 <Layout title="404: Not Found" description="Page not found">

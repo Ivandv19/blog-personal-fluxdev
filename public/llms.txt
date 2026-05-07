@@ -1,0 +1,39 @@
+# FluxDev Blog
+
+> Blog personal sobre desarrollo y tecnología. Artículos, búsqueda instantánea y sistema de comentarios.
+
+## Sections
+
+- [Inicio](/)
+- [Blog](/blog)
+- [About](/about)
+- [Tags](/etiquetas)
+
+## Technical Details
+
+- **Stack**: Astro 6, Tailwind CSS 4, TypeScript
+- **i18n**: Español (default) e Inglés
+- **Comentarios**: Cloudflare D1 + Turnstile anti-spam
+- **Búsqueda**: Pagefind (static search indexing)
+- **Deploy**: Cloudflare Pages
+
+---
+
+# FluxDev Blog (English)
+
+> Personal blog about development and technology. Articles, instant search, and comment system.
+
+## Sections
+
+- [Home](/en)
+- [Blog](/en/blog)
+- [About](/en/about)
+- [Tags](/en/tags)
+
+## Technical Details
+
+- **Stack**: Astro 6, Tailwind CSS 4, TypeScript
+- **i18n**: Spanish (default) and English
+- **Comments**: Cloudflare D1 + Turnstile anti-spam
+- **Search**: Pagefind (static search indexing)
+- **Deploy**: Cloudflare Pages

@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.4.14/schema.json",
 	// Control de versiones (VCS)
 	// Permite a Biome integrarse con Git para ignorar archivos automáticamente
 	"vcs": {
@@ -10,6 +10,11 @@
 	// Configuración de archivos
 	"files": {
 		"ignoreUnknown": false // No ignora archivos desconocidos
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		}
 	},
 	// Formateador de código
 	// Biome formatea automáticamente tu código para mantener consistencia
@@ -31,6 +36,22 @@
 			"quoteStyle": "double" // Usa comillas dobles ("") en lugar de simples ('')
 		}
 	},
+	// Los archivos Astro usan frontmatter (---) separado del template HTML,
+	// Biome no puede detectar variables/imports usados en el template.
+	// Se deshabilitan estas reglas para .astro para evitar falsos positivos.
+	"overrides": [
+		{
+			"includes": ["**/*.astro"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedVariables": "off",
+						"noUnusedImports": "off"
+					}
+				}
+			}
+		}
+	],
 	// Asistente de código
 	// Ayuda con refactorizaciones y mejoras automáticas
 	"assist": {

@@ -1,9 +1,4 @@
 ---
-/**
- * Componente de navegación para cambiar entre idiomas (es/en) con persistencia de preferencia.
- */
-
-import { getRelativeLocaleUrl } from "astro:i18n";
 import { languages } from "../i18n/ui";
 import { getTranslatedPath } from "../utils/posts";
 
@@ -32,21 +27,21 @@ const lang = currentPath.split("/")[1] === "en" ? "en" : "es";
  * @returns {string} Ruta absoluta para redirección.
  */
 function getLangPath(targetLang: string) {
-    const currentPath = Astro.url.pathname;
+	const currentPath = Astro.url.pathname;
 
-    // 1. Intentar encontrar traducción específica para posts del blog
-    const translatedPath = getTranslatedPath(currentPath, targetLang);
-    if (translatedPath) return translatedPath;
+	// 1. Intentar encontrar traducción específica para posts del blog
+	const translatedPath = getTranslatedPath(currentPath, targetLang);
+	if (translatedPath) return translatedPath;
 
-    // 2. Aplicar reglas genéricas de prefijo de idioma
-    if (targetLang === "es") {
-        // 2.1. Remover prefijo "/en" si existe, o retornar raíz
-        return currentPath.replace(/^\/en/, "") || "/";
-    } else {
-        // 2.2. Agregar prefijo "/en" si no está presente
-        if (currentPath.startsWith("/en")) return currentPath;
-        return `/en${currentPath === "/" ? "" : currentPath}`;
-    }
+	// 2. Aplicar reglas genéricas de prefijo de idioma
+	if (targetLang === "es") {
+		// 2.1. Remover prefijo "/en" si existe, o retornar raíz
+		return currentPath.replace(/^\/en/, "") || "/";
+	} else {
+		// 2.2. Agregar prefijo "/en" si no está presente
+		if (currentPath.startsWith("/en")) return currentPath;
+		return `/en${currentPath === "/" ? "" : currentPath}`;
+	}
 }
 ---
 

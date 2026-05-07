@@ -18,18 +18,18 @@
 		"@astrojs/sitemap": "^3.7.2",
 		"@fontsource/outfit": "^5.2.8",
 		"@tailwindcss/vite": "^4.2.4",
-		"astro": "^6.2.0",
-		"hono": "^4.12.16",
+		"astro": "^6.3.0",
+		"hono": "^4.12.18",
 		"mdast-util-to-string": "^4.0.0",
 		"pagefind": "^1.5.2",
 		"reading-time": "^1.5.0",
 		"tailwindcss": "^4.2.4",
-		"zod": "^4.4.1"
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.13",
-		"@cloudflare/workers-types": "^4.20260430.1",
-		"@iconify/json": "^2.2.468",
+		"@biomejs/biome": "^2.4.14",
+		"@cloudflare/workers-types": "^4.20260507.1",
+		"@iconify/json": "^2.2.470",
 		"@iconify/tailwind4": "^1.2.3",
 		"@tailwindcss/typography": "^0.5.19",
 		"@testing-library/dom": "^10.4.1",
@@ -38,6 +38,6 @@
 		"jsdom": "^29.1.1",
 		"typescript": "^6.0.3",
 		"vitest": "^4.1.5",
-		"wrangler": "^4.86.0"
+		"wrangler": "^4.89.0"
 	}
 }

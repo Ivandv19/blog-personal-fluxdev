@@ -3,8 +3,8 @@
  * Extiende Vitest con matchers de @testing-library/jest-dom para aserciones de DOM.
  */
 
-import { expect } from 'vitest';
-import * as matchers from '@testing-library/jest-dom/matchers';
+import * as matchers from "@testing-library/jest-dom/matchers";
+import { expect } from "vitest";
 
 /**
  * Registra los matchers de jest-dom en el objeto expect de Vitest.
